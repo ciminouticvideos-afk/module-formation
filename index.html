@@ -1,0 +1,1002 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fame House — Module Formation</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=DM+Mono:wght@300;400;500&family=Spectral:ital,wght@0,300;0,400;0,600;1,300;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0D0B08;
+    --bg2: #141210;
+    --cream: #F0E8D5;
+    --cream-dim: rgba(240,232,213,0.6);
+    --cream-faint: rgba(240,232,213,0.08);
+    --gold: #C9952A;
+    --gold-dim: rgba(201,149,42,0.3);
+    --gold-faint: rgba(201,149,42,0.08);
+    --rust: #B85C38;
+    --teal: #3D7A6F;
+    --error: #C0392B;
+    --error-faint: rgba(192,57,43,0.08);
+    --warn: #D4A832;
+    --success: #3D7A6F;
+    --success-faint: rgba(61,122,111,0.1);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { height: 100%; }
+
+  body {
+    background: var(--bg);
+    color: var(--cream);
+    font-family: 'Spectral', Georgia, serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ========== GRAIN OVERLAY ========== */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 1000;
+    opacity: 0.4;
+  }
+
+  /* ========== SCREENS ========== */
+  .screen {
+    display: none;
+    min-height: 100vh;
+  }
+  .screen.active { display: flex; }
+
+  /* ========== GATE SCREEN ========== */
+  #gate {
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 20px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .gate-bg {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 60% 50% at 50% 0%, rgba(201,149,42,0.06) 0%, transparent 70%),
+      radial-gradient(ellipse 40% 40% at 20% 80%, rgba(61,122,111,0.04) 0%, transparent 60%);
+    pointer-events: none;
+  }
+
+  .gate-lines {
+    position: absolute;
+    inset: 0;
+    background-image:
+      repeating-linear-gradient(0deg, transparent, transparent 79px, rgba(240,232,213,0.02) 79px, rgba(240,232,213,0.02) 80px),
+      repeating-linear-gradient(90deg, transparent, transparent 79px, rgba(240,232,213,0.02) 79px, rgba(240,232,213,0.02) 80px);
+    pointer-events: none;
+  }
+
+  .gate-inner {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    max-width: 440px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+  }
+
+  /* Logo mark */
+  .logo-mark {
+    width: 64px;
+    height: 64px;
+    border: 1px solid var(--gold-dim);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 32px;
+    position: relative;
+    animation: fadeIn 0.6s ease both;
+  }
+
+  .logo-mark::before, .logo-mark::after {
+    content: '';
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    border: 1px solid var(--gold);
+  }
+  .logo-mark::before { top: -5px; left: -5px; border-right: none; border-bottom: none; }
+  .logo-mark::after { bottom: -5px; right: -5px; border-left: none; border-top: none; }
+
+  .logo-text {
+    font-family: 'Playfair Display', serif;
+    font-size: 1rem;
+    font-weight: 900;
+    color: var(--gold);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .gate-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.8rem, 5vw, 2.8rem);
+    font-weight: 900;
+    color: var(--cream);
+    text-align: center;
+    line-height: 1.1;
+    margin-bottom: 8px;
+    animation: fadeIn 0.6s ease 0.1s both;
+  }
+
+  .gate-title em {
+    font-style: italic;
+    color: var(--gold);
+  }
+
+  .gate-sub {
+    font-family: 'Spectral', serif;
+    font-style: italic;
+    font-size: 0.9rem;
+    color: var(--cream-dim);
+    text-align: center;
+    margin-bottom: 48px;
+    animation: fadeIn 0.6s ease 0.2s both;
+  }
+
+  /* Input group */
+  .input-group {
+    width: 100%;
+    margin-bottom: 16px;
+    animation: fadeIn 0.6s ease 0.3s both;
+  }
+
+  .input-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgba(240,232,213,0.4);
+    margin-bottom: 10px;
+    display: block;
+  }
+
+  .input-wrap {
+    position: relative;
+  }
+
+  .key-input {
+    width: 100%;
+    background: rgba(240,232,213,0.04);
+    border: 1px solid rgba(240,232,213,0.1);
+    color: var(--cream);
+    font-family: 'DM Mono', monospace;
+    font-size: 1rem;
+    letter-spacing: 0.15em;
+    padding: 16px 20px;
+    outline: none;
+    transition: border-color 0.2s ease, background 0.2s ease;
+    text-transform: uppercase;
+    caret-color: var(--gold);
+  }
+
+  .key-input:focus {
+    border-color: var(--gold-dim);
+    background: rgba(201,149,42,0.04);
+  }
+
+  .key-input::placeholder {
+    color: rgba(240,232,213,0.2);
+    letter-spacing: 0.1em;
+    font-size: 0.8rem;
+  }
+
+  .key-input.error {
+    border-color: rgba(192,57,43,0.5);
+    background: var(--error-faint);
+  }
+
+  .key-input.success {
+    border-color: rgba(61,122,111,0.5);
+    background: var(--success-faint);
+  }
+
+  /* Submit button */
+  .btn-access {
+    width: 100%;
+    background: var(--gold);
+    color: var(--bg);
+    border: none;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    padding: 18px 32px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    margin-top: 4px;
+    position: relative;
+    overflow: hidden;
+    animation: fadeIn 0.6s ease 0.4s both;
+  }
+
+  .btn-access:hover {
+    background: #D4A832;
+    transform: translateY(-1px);
+  }
+
+  .btn-access:active {
+    transform: translateY(0);
+  }
+
+  .btn-access:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+  }
+
+  .btn-access .btn-loading {
+    display: none;
+  }
+
+  .btn-access.loading .btn-text { display: none; }
+  .btn-access.loading .btn-loading { display: inline-flex; align-items: center; gap: 8px; }
+
+  .spinner {
+    width: 14px;
+    height: 14px;
+    border: 2px solid rgba(13,11,8,0.3);
+    border-top-color: var(--bg);
+    border-radius: 50%;
+    animation: spin 0.6s linear infinite;
+  }
+
+  /* Message box */
+  .msg-box {
+    width: 100%;
+    padding: 14px 18px;
+    margin-top: 16px;
+    display: none;
+    align-items: flex-start;
+    gap: 12px;
+    font-size: 0.82rem;
+    line-height: 1.6;
+    animation: fadeIn 0.3s ease both;
+  }
+
+  .msg-box.show { display: flex; }
+
+  .msg-box.msg-error {
+    background: var(--error-faint);
+    border-left: 2px solid var(--error);
+    color: #E88A7A;
+  }
+
+  .msg-box.msg-warn {
+    background: rgba(212,168,50,0.08);
+    border-left: 2px solid var(--warn);
+    color: #E8C96A;
+  }
+
+  .msg-icon {
+    font-size: 1rem;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  /* Footer note */
+  .gate-footer {
+    margin-top: 40px;
+    text-align: center;
+    animation: fadeIn 0.6s ease 0.5s both;
+  }
+
+  .gate-footer p {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.12em;
+    color: rgba(240,232,213,0.2);
+    line-height: 2;
+  }
+
+  .gate-footer a {
+    color: rgba(201,149,42,0.5);
+    text-decoration: none;
+  }
+
+  /* URL key indicator */
+  .url-key-badge {
+    display: none;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 14px;
+    background: var(--success-faint);
+    border: 1px solid rgba(61,122,111,0.2);
+    margin-bottom: 16px;
+    width: 100%;
+    animation: fadeIn 0.4s ease both;
+  }
+
+  .url-key-badge.show { display: flex; }
+
+  .url-key-badge span {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.12em;
+    color: var(--teal);
+  }
+
+  .url-key-val {
+    font-size: 0.7rem !important;
+    color: var(--cream-dim) !important;
+    letter-spacing: 0.15em !important;
+  }
+
+  /* ========== CONTENT SCREEN ========== */
+  #content {
+    flex-direction: column;
+    min-height: 100vh;
+  }
+
+  /* Top bar */
+  .top-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    background: rgba(13,11,8,0.95);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(240,232,213,0.06);
+    padding: 0 32px;
+    height: 56px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .top-bar-logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 1rem;
+    font-weight: 900;
+    color: var(--gold);
+    letter-spacing: 0.08em;
+  }
+
+  .top-bar-logo span {
+    color: rgba(240,232,213,0.4);
+    font-weight: 400;
+    font-size: 0.75rem;
+    margin-left: 12px;
+    font-family: 'DM Mono', monospace;
+    letter-spacing: 0.15em;
+  }
+
+  .top-bar-right {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .access-indicator {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.12em;
+    color: rgba(240,232,213,0.3);
+  }
+
+  .access-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--teal);
+    animation: pulse-dot 2s ease infinite;
+  }
+
+  /* Content wrapper */
+  .content-wrap {
+    padding-top: 56px;
+    flex: 1;
+  }
+
+  /* Module hero */
+  .module-hero {
+    padding: 80px 40px 60px;
+    max-width: 900px;
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  .module-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 16px;
+    border: 1px solid var(--gold-dim);
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 32px;
+  }
+
+  .module-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.5rem, 6vw, 5rem);
+    font-weight: 900;
+    color: var(--cream);
+    line-height: 0.95;
+    letter-spacing: -0.02em;
+    margin-bottom: 24px;
+  }
+
+  .module-title em {
+    font-style: italic;
+    color: var(--gold);
+  }
+
+  .module-desc {
+    font-family: 'Spectral', serif;
+    font-style: italic;
+    font-size: 1.1rem;
+    color: var(--cream-dim);
+    max-width: 500px;
+    margin: 0 auto 48px;
+    line-height: 1.7;
+  }
+
+  .module-stats {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    flex-wrap: wrap;
+  }
+
+  .stat {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .stat-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem;
+    font-weight: 900;
+    color: var(--gold);
+    line-height: 1;
+  }
+
+  .stat-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: rgba(240,232,213,0.3);
+  }
+
+  /* Content body — placeholder for actual module content */
+  .content-body {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0 40px 80px;
+  }
+
+  .content-divider {
+    height: 1px;
+    background: rgba(240,232,213,0.06);
+    margin: 60px 0;
+  }
+
+  .coming-soon {
+    text-align: center;
+    padding: 80px 40px;
+    border: 1px dashed rgba(240,232,213,0.1);
+  }
+
+  .coming-soon-icon {
+    font-size: 3rem;
+    margin-bottom: 24px;
+    opacity: 0.4;
+  }
+
+  .coming-soon h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.5rem;
+    color: var(--cream);
+    margin-bottom: 12px;
+  }
+
+  .coming-soon p {
+    font-family: 'Spectral', serif;
+    font-style: italic;
+    color: var(--cream-dim);
+    font-size: 0.95rem;
+  }
+
+  /* Welcome toast */
+  .toast {
+    position: fixed;
+    top: 72px;
+    right: 24px;
+    background: var(--bg2);
+    border: 1px solid rgba(61,122,111,0.3);
+    border-left: 3px solid var(--teal);
+    padding: 16px 20px;
+    max-width: 320px;
+    z-index: 200;
+    transform: translateX(120%);
+    transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  .toast.show {
+    transform: translateX(0);
+  }
+
+  .toast-title {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--teal);
+    margin-bottom: 4px;
+  }
+
+  .toast-body {
+    font-size: 0.82rem;
+    color: var(--cream-dim);
+    line-height: 1.5;
+  }
+
+  .toast-key {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--gold);
+    margin-top: 6px;
+  }
+
+  /* ========== KEYFRAMES ========== */
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+
+  @keyframes pulse-dot {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+  }
+
+  @keyframes slideIn {
+    from { opacity: 0; transform: translateY(-8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ========== RESPONSIVE ========== */
+  @media (max-width: 600px) {
+    .top-bar { padding: 0 16px; }
+    .module-hero { padding: 60px 20px 40px; }
+    .content-body { padding: 0 20px 60px; }
+    .module-stats { gap: 24px; }
+    .toast { right: 16px; left: 16px; max-width: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ========================================
+     GATE SCREEN — Vérification d'accès
+========================================= -->
+<div id="gate" class="screen active">
+  <div class="gate-bg"></div>
+  <div class="gate-lines"></div>
+
+  <div class="gate-inner">
+
+    <div class="logo-mark">
+      <span class="logo-text">FH</span>
+    </div>
+
+    <h1 class="gate-title">Formation<br><em>Vidéo IA</em></h1>
+    <p class="gate-sub">Entrez votre clé d'accès personnelle pour accéder au module</p>
+
+    <!-- Badge clé URL détectée -->
+    <div class="url-key-badge" id="urlKeyBadge">
+      <span>🔑</span>
+      <span>Clé détectée :</span>
+      <span class="url-key-val" id="urlKeyVal"></span>
+    </div>
+
+    <div class="input-group">
+      <label class="input-label" for="keyInput">Clé d'accès personnelle</label>
+      <div class="input-wrap">
+        <input
+          type="text"
+          id="keyInput"
+          class="key-input"
+          placeholder="XXXX-XXXX-XXXX"
+          maxlength="30"
+          autocomplete="off"
+          autocorrect="off"
+          spellcheck="false"
+        />
+      </div>
+    </div>
+
+    <button class="btn-access" id="btnAccess" onclick="checkAccess()">
+      <span class="btn-text">Accéder au module →</span>
+      <span class="btn-loading">
+        <span class="spinner"></span>
+        Vérification en cours...
+      </span>
+    </button>
+
+    <!-- Message d'erreur -->
+    <div class="msg-box" id="msgBox">
+      <span class="msg-icon" id="msgIcon"></span>
+      <span id="msgText"></span>
+    </div>
+
+    <div class="gate-footer">
+      <p>Accès strictement personnel — lié à votre appareil</p>
+      <p>Vous n'avez pas de clé ? <a href="mailto:contact@famehouse.mg">Contacter Fame House</a></p>
+    </div>
+
+  </div>
+</div>
+
+<!-- ========================================
+     CONTENT SCREEN — Module protégé
+========================================= -->
+<div id="content" class="screen">
+
+  <!-- Top bar -->
+  <div class="top-bar">
+    <div class="top-bar-logo">
+      Fame House
+      <span>/ Module Formation</span>
+    </div>
+    <div class="top-bar-right">
+      <div class="access-indicator">
+        <div class="access-dot"></div>
+        <span id="accessKeyDisplay">—</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast de bienvenue -->
+  <div class="toast" id="welcomeToast">
+    <div class="toast-title">✓ Accès autorisé</div>
+    <div class="toast-body">Bienvenue dans votre module de formation.</div>
+    <div class="toast-key" id="toastKey"></div>
+  </div>
+
+  <!-- Content wrapper -->
+  <div class="content-wrap">
+
+    <!-- Module hero -->
+    <div class="module-hero">
+      <div class="module-badge">
+        <span>●</span> Module actif
+      </div>
+      <h1 class="module-title">Création de<br>contenu <em>vidéo</em><br>avec l'IA</h1>
+      <p class="module-desc">Du brief au rendu final — maîtrisez la production vidéo publicitaire avec les outils d'intelligence artificielle</p>
+
+      <div class="module-stats">
+        <div class="stat">
+          <div class="stat-num">7</div>
+          <div class="stat-label">Phases</div>
+        </div>
+        <div class="stat">
+          <div class="stat-num">17</div>
+          <div class="stat-label">Scènes produites</div>
+        </div>
+        <div class="stat">
+          <div class="stat-num">2</div>
+          <div class="stat-label">Campagnes complètes</div>
+        </div>
+        <div class="stat">
+          <div class="stat-num">∞</div>
+          <div class="stat-label">Applications</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Content body -->
+    <div class="content-body">
+      <div class="content-divider"></div>
+
+      <!-- Placeholder — remplacé par le vrai contenu du module -->
+      <div class="coming-soon">
+        <div class="coming-soon-icon">🎬</div>
+        <h3>Contenu du module en cours de chargement</h3>
+        <p>Le contenu de votre formation sera intégré ici.<br>Cette page est votre accès sécurisé et personnel.</p>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ========================================
+     JAVASCRIPT — Système de protection
+========================================= -->
+<script>
+// ============================================
+// CONFIG — Ne pas modifier
+// ============================================
+const API_URL = "https://script.google.com/macros/s/AKfycbxjbakIWkKS08igITna5tKkxOjB9Ig1Vcs2-1FyoPOrrlRpjGdVhR8399ktWkzZatli/exec";
+
+// ============================================
+// EMPREINTE APPAREIL
+// Génère un hash unique basé sur les
+// caractéristiques du navigateur/appareil
+// ============================================
+async function getDeviceFingerprint() {
+  const components = [
+    navigator.userAgent,
+    navigator.language,
+    screen.width + 'x' + screen.height,
+    screen.colorDepth,
+    new Date().getTimezoneOffset(),
+    navigator.hardwareConcurrency || '',
+    navigator.platform || '',
+  ].join('|');
+
+  // Hash SHA-256 via Web Crypto API
+  const encoder = new TextEncoder();
+  const data = encoder.encode(components);
+  const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+  const hashArray = Array.from(new Uint8Array(hashBuffer));
+  const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+  return hashHex.substring(0, 32); // 32 premiers caractères
+}
+
+// ============================================
+// VÉRIFICATION CLÉE URL
+// Lit automatiquement la clé dans l'URL
+// Format : module.html?key=XXXX-XXXX
+// ============================================
+function getKeyFromURL() {
+  const params = new URLSearchParams(window.location.search);
+  return params.get('key') || params.get('KEY') || null;
+}
+
+// ============================================
+// AFFICHAGE MESSAGES
+// ============================================
+function showMessage(type, text) {
+  const box = document.getElementById('msgBox');
+  const icon = document.getElementById('msgIcon');
+  const msg = document.getElementById('msgText');
+
+  box.className = 'msg-box show';
+  msg.textContent = text;
+
+  if (type === 'error') {
+    box.classList.add('msg-error');
+    icon.textContent = '✗';
+    document.getElementById('keyInput').classList.add('error');
+    document.getElementById('keyInput').classList.remove('success');
+  } else if (type === 'warn') {
+    box.classList.add('msg-warn');
+    icon.textContent = '⚠';
+  }
+}
+
+function clearMessage() {
+  const box = document.getElementById('msgBox');
+  box.className = 'msg-box';
+  document.getElementById('keyInput').classList.remove('error', 'success');
+}
+
+// ============================================
+// BOUTON ÉTAT
+// ============================================
+function setLoading(state) {
+  const btn = document.getElementById('btnAccess');
+  if (state) {
+    btn.classList.add('loading');
+    btn.disabled = true;
+  } else {
+    btn.classList.remove('loading');
+    btn.disabled = false;
+  }
+}
+
+// ============================================
+// ACCÈS AUTORISÉ — Afficher le contenu
+// ============================================
+function grantAccess(key, isFirst) {
+  // Marquer la clé dans le localStorage pour
+  // éviter de requêter l'API à chaque rechargement
+  localStorage.setItem('fh_key', key);
+  localStorage.setItem('fh_ts', Date.now());
+
+  // Afficher le contenu
+  document.getElementById('gate').classList.remove('active');
+  document.getElementById('content').classList.add('active');
+
+  // Afficher la clé dans la top bar
+  const short = key.length > 12 ? key.substring(0, 12) + '...' : key;
+  document.getElementById('accessKeyDisplay').textContent = short;
+
+  // Toast de bienvenue
+  const toast = document.getElementById('welcomeToast');
+  document.getElementById('toastKey').textContent = 'Clé : ' + key;
+  setTimeout(() => { toast.classList.add('show'); }, 300);
+  setTimeout(() => { toast.classList.remove('show'); }, 5000);
+}
+
+// ============================================
+// VÉRIFICATION PRINCIPALE
+// ============================================
+async function checkAccess() {
+  clearMessage();
+
+  const input = document.getElementById('keyInput');
+  const key = input.value.trim().toUpperCase();
+
+  if (!key || key.length < 3) {
+    showMessage('error', 'Veuillez entrer votre clé d\'accès.');
+    input.focus();
+    return;
+  }
+
+  setLoading(true);
+
+  try {
+    // Générer l'empreinte de l'appareil
+    const deviceHash = await getDeviceFingerprint();
+
+    // Appeler l'API Google Apps Script
+    const url = `${API_URL}?action=verify&key=${encodeURIComponent(key)}&hash=${deviceHash}`;
+    const response = await fetch(url);
+
+    if (!response.ok) {
+      throw new Error('Erreur réseau');
+    }
+
+    const data = await response.json();
+
+    setLoading(false);
+
+    switch (data.status) {
+
+      case 'ok':
+        // Accès autorisé
+        input.classList.add('success');
+        grantAccess(key, data.first);
+        break;
+
+      case 'invalid':
+        showMessage('error', 'Cette clé d\'accès n\'existe pas. Vérifiez que vous l\'avez copiée correctement.');
+        break;
+
+      case 'disabled':
+        showMessage('error', 'Cette clé d\'accès a été désactivée. Contactez Fame House pour plus d\'informations.');
+        break;
+
+      case 'wrong_device':
+        showMessage('error', 'Cette clé est liée à un autre appareil. Chaque clé est strictement personnelle et ne peut être utilisée que sur l\'appareil original.');
+        break;
+
+      default:
+        showMessage('error', 'Erreur inattendue. Réessayez dans quelques instants.');
+    }
+
+  } catch (err) {
+    setLoading(false);
+    showMessage('warn', 'Impossible de vérifier votre clé. Vérifiez votre connexion internet et réessayez.');
+    console.error('Erreur API:', err);
+  }
+}
+
+// ============================================
+// VÉRIFICATION SESSION LOCALE
+// Si la clé est déjà validée sur cet appareil,
+// on ne requête pas l'API à chaque chargement
+// (valide 7 jours)
+// ============================================
+async function checkLocalSession() {
+  const savedKey = localStorage.getItem('fh_key');
+  const savedTs = localStorage.getItem('fh_ts');
+
+  if (!savedKey || !savedTs) return false;
+
+  // Expiration 7 jours
+  const sevenDays = 7 * 24 * 60 * 60 * 1000;
+  if (Date.now() - parseInt(savedTs) > sevenDays) {
+    localStorage.removeItem('fh_key');
+    localStorage.removeItem('fh_ts');
+    return false;
+  }
+
+  // Vérifier que l'empreinte correspond toujours
+  // (protection si quelqu'un copie le localStorage)
+  setLoading(true);
+  try {
+    const deviceHash = await getDeviceFingerprint();
+    const url = `${API_URL}?action=verify&key=${encodeURIComponent(savedKey)}&hash=${deviceHash}`;
+    const response = await fetch(url);
+    const data = await response.json();
+    setLoading(false);
+
+    if (data.status === 'ok') {
+      grantAccess(savedKey, false);
+      return true;
+    } else {
+      localStorage.removeItem('fh_key');
+      localStorage.removeItem('fh_ts');
+      return false;
+    }
+  } catch {
+    setLoading(false);
+    // En cas d'erreur réseau, on laisse passer si la session est récente (< 24h)
+    const oneDay = 24 * 60 * 60 * 1000;
+    if (Date.now() - parseInt(savedTs) < oneDay) {
+      grantAccess(savedKey, false);
+      return true;
+    }
+    return false;
+  }
+}
+
+// ============================================
+// ENTER KEY SUPPORT
+// ============================================
+document.getElementById('keyInput').addEventListener('keydown', function(e) {
+  if (e.key === 'Enter') checkAccess();
+});
+
+// ============================================
+// INPUT FORMATTING
+// Auto-majuscules + tirets automatiques
+// Format : XXXX-XXXX-XXXX
+// ============================================
+document.getElementById('keyInput').addEventListener('input', function(e) {
+  clearMessage();
+  let val = e.target.value.toUpperCase().replace(/[^A-Z0-9-]/g, '');
+  e.target.value = val;
+});
+
+// ============================================
+// INIT — Au chargement de la page
+// ============================================
+window.addEventListener('DOMContentLoaded', async () => {
+
+  // 1. Vérifier si clé dans l'URL
+  const urlKey = getKeyFromURL();
+  if (urlKey) {
+    const badge = document.getElementById('urlKeyBadge');
+    const valEl = document.getElementById('urlKeyVal');
+    badge.classList.add('show');
+    valEl.textContent = urlKey.toUpperCase();
+    document.getElementById('keyInput').value = urlKey.toUpperCase();
+  }
+
+  // 2. Vérifier session locale
+  const hasSession = await checkLocalSession();
+
+  // 3. Si clé dans URL et pas de session active → vérifier automatiquement
+  if (urlKey && !hasSession) {
+    setTimeout(() => checkAccess(), 800);
+  }
+});
+</script>
+
+</body>
+</html>
