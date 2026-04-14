@@ -35,7 +35,6 @@
     overflow-x: hidden;
   }
 
-  /* ========== GRAIN OVERLAY ========== */
   body::before {
     content: '';
     position: fixed;
@@ -47,13 +46,10 @@
   }
 
   /* ========== SCREENS ========== */
-  .screen {
-    display: none;
-    min-height: 100vh;
-  }
+  .screen { display: none; min-height: 100vh; }
   .screen.active { display: flex; }
 
-  /* ========== GATE SCREEN ========== */
+  /* ========== GATE ========== */
   #gate {
     flex-direction: column;
     align-items: center;
@@ -89,10 +85,8 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 0;
   }
 
-  /* Logo mark */
   .logo-mark {
     width: 64px;
     height: 64px;
@@ -113,7 +107,7 @@
     border: 1px solid var(--gold);
   }
   .logo-mark::before { top: -5px; left: -5px; border-right: none; border-bottom: none; }
-  .logo-mark::after { bottom: -5px; right: -5px; border-left: none; border-top: none; }
+  .logo-mark::after  { bottom: -5px; right: -5px; border-left: none; border-top: none; }
 
   .logo-text {
     font-family: 'Playfair Display', serif;
@@ -121,7 +115,6 @@
     font-weight: 900;
     color: var(--gold);
     letter-spacing: 0.1em;
-    text-transform: uppercase;
   }
 
   .gate-title {
@@ -135,10 +128,7 @@
     animation: fadeIn 0.6s ease 0.1s both;
   }
 
-  .gate-title em {
-    font-style: italic;
-    color: var(--gold);
-  }
+  .gate-title em { font-style: italic; color: var(--gold); }
 
   .gate-sub {
     font-family: 'Spectral', serif;
@@ -150,7 +140,26 @@
     animation: fadeIn 0.6s ease 0.2s both;
   }
 
-  /* Input group */
+  .url-key-badge {
+    display: none;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 14px;
+    background: var(--success-faint);
+    border: 1px solid rgba(61,122,111,0.2);
+    margin-bottom: 16px;
+    width: 100%;
+    animation: fadeIn 0.4s ease both;
+  }
+  .url-key-badge.show { display: flex; }
+  .url-key-badge span {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.12em;
+    color: var(--teal);
+  }
+  .url-key-val { font-size: 0.7rem !important; color: var(--cream-dim) !important; }
+
   .input-group {
     width: 100%;
     margin-bottom: 16px;
@@ -165,10 +174,6 @@
     color: rgba(240,232,213,0.4);
     margin-bottom: 10px;
     display: block;
-  }
-
-  .input-wrap {
-    position: relative;
   }
 
   .key-input {
@@ -197,17 +202,9 @@
     font-size: 0.8rem;
   }
 
-  .key-input.error {
-    border-color: rgba(192,57,43,0.5);
-    background: var(--error-faint);
-  }
+  .key-input.error   { border-color: rgba(192,57,43,0.5);  background: var(--error-faint); }
+  .key-input.success { border-color: rgba(61,122,111,0.5); background: var(--success-faint); }
 
-  .key-input.success {
-    border-color: rgba(61,122,111,0.5);
-    background: var(--success-faint);
-  }
-
-  /* Submit button */
   .btn-access {
     width: 100%;
     background: var(--gold);
@@ -222,43 +219,25 @@
     cursor: pointer;
     transition: all 0.2s ease;
     margin-top: 4px;
-    position: relative;
-    overflow: hidden;
     animation: fadeIn 0.6s ease 0.4s both;
   }
 
-  .btn-access:hover {
-    background: #D4A832;
-    transform: translateY(-1px);
-  }
+  .btn-access:hover:not(:disabled) { background: #D4A832; transform: translateY(-1px); }
+  .btn-access:active                { transform: translateY(0); }
+  .btn-access:disabled              { opacity: 0.5; cursor: not-allowed; transform: none; }
 
-  .btn-access:active {
-    transform: translateY(0);
-  }
-
-  .btn-access:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-    transform: none;
-  }
-
-  .btn-access .btn-loading {
-    display: none;
-  }
-
-  .btn-access.loading .btn-text { display: none; }
-  .btn-access.loading .btn-loading { display: inline-flex; align-items: center; gap: 8px; }
+  .btn-loading { display: none; align-items: center; gap: 8px; }
+  .btn-access.loading .btn-text    { display: none; }
+  .btn-access.loading .btn-loading { display: inline-flex; }
 
   .spinner {
-    width: 14px;
-    height: 14px;
+    width: 14px; height: 14px;
     border: 2px solid rgba(13,11,8,0.3);
     border-top-color: var(--bg);
     border-radius: 50%;
     animation: spin 0.6s linear infinite;
   }
 
-  /* Message box */
   .msg-box {
     width: 100%;
     padding: 14px 18px;
@@ -270,34 +249,16 @@
     line-height: 1.6;
     animation: fadeIn 0.3s ease both;
   }
+  .msg-box.show      { display: flex; }
+  .msg-box.msg-error { background: var(--error-faint); border-left: 2px solid var(--error); color: #E88A7A; }
+  .msg-box.msg-warn  { background: rgba(212,168,50,0.08); border-left: 2px solid var(--warn); color: #E8C96A; }
+  .msg-icon          { font-size: 1rem; flex-shrink: 0; margin-top: 1px; }
 
-  .msg-box.show { display: flex; }
-
-  .msg-box.msg-error {
-    background: var(--error-faint);
-    border-left: 2px solid var(--error);
-    color: #E88A7A;
-  }
-
-  .msg-box.msg-warn {
-    background: rgba(212,168,50,0.08);
-    border-left: 2px solid var(--warn);
-    color: #E8C96A;
-  }
-
-  .msg-icon {
-    font-size: 1rem;
-    flex-shrink: 0;
-    margin-top: 1px;
-  }
-
-  /* Footer note */
   .gate-footer {
     margin-top: 40px;
     text-align: center;
     animation: fadeIn 0.6s ease 0.5s both;
   }
-
   .gate-footer p {
     font-family: 'DM Mono', monospace;
     font-size: 0.6rem;
@@ -305,52 +266,14 @@
     color: rgba(240,232,213,0.2);
     line-height: 2;
   }
+  .gate-footer a { color: rgba(201,149,42,0.5); text-decoration: none; }
 
-  .gate-footer a {
-    color: rgba(201,149,42,0.5);
-    text-decoration: none;
-  }
+  /* ========== CONTENT ========== */
+  #content { flex-direction: column; }
 
-  /* URL key indicator */
-  .url-key-badge {
-    display: none;
-    align-items: center;
-    gap: 8px;
-    padding: 8px 14px;
-    background: var(--success-faint);
-    border: 1px solid rgba(61,122,111,0.2);
-    margin-bottom: 16px;
-    width: 100%;
-    animation: fadeIn 0.4s ease both;
-  }
-
-  .url-key-badge.show { display: flex; }
-
-  .url-key-badge span {
-    font-family: 'DM Mono', monospace;
-    font-size: 0.6rem;
-    letter-spacing: 0.12em;
-    color: var(--teal);
-  }
-
-  .url-key-val {
-    font-size: 0.7rem !important;
-    color: var(--cream-dim) !important;
-    letter-spacing: 0.15em !important;
-  }
-
-  /* ========== CONTENT SCREEN ========== */
-  #content {
-    flex-direction: column;
-    min-height: 100vh;
-  }
-
-  /* Top bar */
   .top-bar {
     position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
+    top: 0; left: 0; right: 0;
     z-index: 100;
     background: rgba(13,11,8,0.95);
     backdrop-filter: blur(12px);
@@ -373,16 +296,10 @@
   .top-bar-logo span {
     color: rgba(240,232,213,0.4);
     font-weight: 400;
-    font-size: 0.75rem;
+    font-size: 0.7rem;
     margin-left: 12px;
     font-family: 'DM Mono', monospace;
     letter-spacing: 0.15em;
-  }
-
-  .top-bar-right {
-    display: flex;
-    align-items: center;
-    gap: 16px;
   }
 
   .access-indicator {
@@ -396,20 +313,14 @@
   }
 
   .access-dot {
-    width: 6px;
-    height: 6px;
+    width: 6px; height: 6px;
     border-radius: 50%;
     background: var(--teal);
     animation: pulse-dot 2s ease infinite;
   }
 
-  /* Content wrapper */
-  .content-wrap {
-    padding-top: 56px;
-    flex: 1;
-  }
+  .content-wrap { padding-top: 56px; flex: 1; }
 
-  /* Module hero */
   .module-hero {
     padding: 80px 40px 60px;
     max-width: 900px;
@@ -440,11 +351,7 @@
     letter-spacing: -0.02em;
     margin-bottom: 24px;
   }
-
-  .module-title em {
-    font-style: italic;
-    color: var(--gold);
-  }
+  .module-title em { font-style: italic; color: var(--gold); }
 
   .module-desc {
     font-family: 'Spectral', serif;
@@ -463,12 +370,7 @@
     flex-wrap: wrap;
   }
 
-  .stat {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 4px;
-  }
+  .stat { display: flex; flex-direction: column; align-items: center; gap: 4px; }
 
   .stat-num {
     font-family: 'Playfair Display', serif;
@@ -486,7 +388,6 @@
     color: rgba(240,232,213,0.3);
   }
 
-  /* Content body — placeholder for actual module content */
   .content-body {
     max-width: 900px;
     margin: 0 auto;
@@ -504,32 +405,24 @@
     padding: 80px 40px;
     border: 1px dashed rgba(240,232,213,0.1);
   }
-
-  .coming-soon-icon {
-    font-size: 3rem;
-    margin-bottom: 24px;
-    opacity: 0.4;
-  }
-
+  .coming-soon-icon { font-size: 3rem; margin-bottom: 24px; opacity: 0.4; }
   .coming-soon h3 {
     font-family: 'Playfair Display', serif;
     font-size: 1.5rem;
     color: var(--cream);
     margin-bottom: 12px;
   }
-
   .coming-soon p {
     font-family: 'Spectral', serif;
     font-style: italic;
     color: var(--cream-dim);
     font-size: 0.95rem;
+    line-height: 1.7;
   }
 
-  /* Welcome toast */
   .toast {
     position: fixed;
-    top: 72px;
-    right: 24px;
+    top: 72px; right: 24px;
     background: var(--bg2);
     border: 1px solid rgba(61,122,111,0.3);
     border-left: 3px solid var(--teal);
@@ -539,10 +432,7 @@
     transform: translateX(120%);
     transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
   }
-
-  .toast.show {
-    transform: translateX(0);
-  }
+  .toast.show { transform: translateX(0); }
 
   .toast-title {
     font-family: 'DM Mono', monospace;
@@ -553,68 +443,39 @@
     margin-bottom: 4px;
   }
 
-  .toast-body {
-    font-size: 0.82rem;
-    color: var(--cream-dim);
-    line-height: 1.5;
-  }
-
-  .toast-key {
-    font-family: 'DM Mono', monospace;
-    font-size: 0.7rem;
-    color: var(--gold);
-    margin-top: 6px;
-  }
+  .toast-body  { font-size: 0.82rem; color: var(--cream-dim); line-height: 1.5; }
+  .toast-key   { font-family: 'DM Mono', monospace; font-size: 0.7rem; color: var(--gold); margin-top: 6px; }
 
   /* ========== KEYFRAMES ========== */
   @keyframes fadeIn {
     from { opacity: 0; transform: translateY(12px); }
-    to { opacity: 1; transform: translateY(0); }
+    to   { opacity: 1; transform: translateY(0); }
   }
+  @keyframes spin       { to { transform: rotate(360deg); } }
+  @keyframes pulse-dot  { 0%,100% { opacity:1; } 50% { opacity:0.3; } }
 
-  @keyframes spin {
-    to { transform: rotate(360deg); }
-  }
-
-  @keyframes pulse-dot {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.3; }
-  }
-
-  @keyframes slideIn {
-    from { opacity: 0; transform: translateY(-8px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-
-  /* ========== RESPONSIVE ========== */
   @media (max-width: 600px) {
-    .top-bar { padding: 0 16px; }
-    .module-hero { padding: 60px 20px 40px; }
+    .top-bar      { padding: 0 16px; }
+    .module-hero  { padding: 60px 20px 40px; }
     .content-body { padding: 0 20px 60px; }
     .module-stats { gap: 24px; }
-    .toast { right: 16px; left: 16px; max-width: none; }
+    .toast        { right: 16px; left: 16px; max-width: none; }
   }
 </style>
 </head>
 <body>
 
-<!-- ========================================
-     GATE SCREEN — Vérification d'accès
-========================================= -->
+<!-- ===== GATE ===== -->
 <div id="gate" class="screen active">
   <div class="gate-bg"></div>
   <div class="gate-lines"></div>
 
   <div class="gate-inner">
-
-    <div class="logo-mark">
-      <span class="logo-text">FH</span>
-    </div>
+    <div class="logo-mark"><span class="logo-text">FH</span></div>
 
     <h1 class="gate-title">Formation<br><em>Vidéo IA</em></h1>
     <p class="gate-sub">Entrez votre clé d'accès personnelle pour accéder au module</p>
 
-    <!-- Badge clé URL détectée -->
     <div class="url-key-badge" id="urlKeyBadge">
       <span>🔑</span>
       <span>Clé détectée :</span>
@@ -623,29 +484,23 @@
 
     <div class="input-group">
       <label class="input-label" for="keyInput">Clé d'accès personnelle</label>
-      <div class="input-wrap">
-        <input
-          type="text"
-          id="keyInput"
-          class="key-input"
-          placeholder="XXXX-XXXX-XXXX"
-          maxlength="30"
-          autocomplete="off"
-          autocorrect="off"
-          spellcheck="false"
-        />
-      </div>
+      <input
+        type="text"
+        id="keyInput"
+        class="key-input"
+        placeholder="XXXX-XXXX-XXXX"
+        maxlength="30"
+        autocomplete="off"
+        autocorrect="off"
+        spellcheck="false"
+      />
     </div>
 
     <button class="btn-access" id="btnAccess" onclick="checkAccess()">
       <span class="btn-text">Accéder au module →</span>
-      <span class="btn-loading">
-        <span class="spinner"></span>
-        Vérification en cours...
-      </span>
+      <span class="btn-loading"><span class="spinner"></span>Vérification...</span>
     </button>
 
-    <!-- Message d'erreur -->
     <div class="msg-box" id="msgBox">
       <span class="msg-icon" id="msgIcon"></span>
       <span id="msgText"></span>
@@ -653,290 +508,213 @@
 
     <div class="gate-footer">
       <p>Accès strictement personnel — lié à votre appareil</p>
-      <p>Vous n'avez pas de clé ? <a href="mailto:contact@famehouse.mg">Contacter Fame House</a></p>
+      <p>Pas de clé ? <a href="mailto:contact@famehouse.mg">Contacter Fame House</a></p>
     </div>
-
   </div>
 </div>
 
-<!-- ========================================
-     CONTENT SCREEN — Module protégé
-========================================= -->
+<!-- ===== CONTENT ===== -->
 <div id="content" class="screen">
-
-  <!-- Top bar -->
   <div class="top-bar">
-    <div class="top-bar-logo">
-      Fame House
-      <span>/ Module Formation</span>
-    </div>
-    <div class="top-bar-right">
-      <div class="access-indicator">
-        <div class="access-dot"></div>
-        <span id="accessKeyDisplay">—</span>
-      </div>
+    <div class="top-bar-logo">Fame House <span>/ Module Formation</span></div>
+    <div class="access-indicator">
+      <div class="access-dot"></div>
+      <span id="accessKeyDisplay">—</span>
     </div>
   </div>
 
-  <!-- Toast de bienvenue -->
   <div class="toast" id="welcomeToast">
     <div class="toast-title">✓ Accès autorisé</div>
     <div class="toast-body">Bienvenue dans votre module de formation.</div>
     <div class="toast-key" id="toastKey"></div>
   </div>
 
-  <!-- Content wrapper -->
   <div class="content-wrap">
-
-    <!-- Module hero -->
     <div class="module-hero">
-      <div class="module-badge">
-        <span>●</span> Module actif
-      </div>
+      <div class="module-badge"><span>●</span> Module actif</div>
       <h1 class="module-title">Création de<br>contenu <em>vidéo</em><br>avec l'IA</h1>
       <p class="module-desc">Du brief au rendu final — maîtrisez la production vidéo publicitaire avec les outils d'intelligence artificielle</p>
-
       <div class="module-stats">
-        <div class="stat">
-          <div class="stat-num">7</div>
-          <div class="stat-label">Phases</div>
-        </div>
-        <div class="stat">
-          <div class="stat-num">17</div>
-          <div class="stat-label">Scènes produites</div>
-        </div>
-        <div class="stat">
-          <div class="stat-num">2</div>
-          <div class="stat-label">Campagnes complètes</div>
-        </div>
-        <div class="stat">
-          <div class="stat-num">∞</div>
-          <div class="stat-label">Applications</div>
-        </div>
+        <div class="stat"><div class="stat-num">7</div><div class="stat-label">Phases</div></div>
+        <div class="stat"><div class="stat-num">17</div><div class="stat-label">Scènes</div></div>
+        <div class="stat"><div class="stat-num">2</div><div class="stat-label">Campagnes</div></div>
+        <div class="stat"><div class="stat-num">∞</div><div class="stat-label">Applications</div></div>
       </div>
     </div>
 
-    <!-- Content body -->
     <div class="content-body">
       <div class="content-divider"></div>
-
-      <!-- Placeholder — remplacé par le vrai contenu du module -->
       <div class="coming-soon">
         <div class="coming-soon-icon">🎬</div>
-        <h3>Contenu du module en cours de chargement</h3>
-        <p>Le contenu de votre formation sera intégré ici.<br>Cette page est votre accès sécurisé et personnel.</p>
+        <h3>Votre module est prêt</h3>
+        <p>Le contenu de votre formation sera intégré ici.<br>
+        Cet accès est strictement personnel et lié à votre appareil.</p>
       </div>
-
     </div>
   </div>
 </div>
 
-<!-- ========================================
-     JAVASCRIPT — Système de protection
-========================================= -->
 <script>
-// ============================================
-// CONFIG — Ne pas modifier
-// ============================================
-const API_URL = "https://script.google.com/macros/s/AKfycbxjbakIWkKS08igITna5tKkxOjB9Ig1Vcs2-1FyoPOrrlRpjGdVhR8399ktWkzZatli/exec";
+// ================================================
+// CONFIG
+// ================================================
+const API = "https://script.google.com/macros/s/AKfycbw-MGIGhrpwd5wkNAvp3zgNJddXZC1GNQiAyD3Wi-aSpDf0gl_j-ymtl6OlkPY4FwQV/exec";
 
-// ============================================
+// ================================================
 // EMPREINTE APPAREIL
-// Génère un hash unique basé sur les
-// caractéristiques du navigateur/appareil
-// ============================================
-async function getDeviceFingerprint() {
-  const components = [
+// ================================================
+async function getFingerprint() {
+  const raw = [
     navigator.userAgent,
     navigator.language,
     screen.width + 'x' + screen.height,
     screen.colorDepth,
     new Date().getTimezoneOffset(),
     navigator.hardwareConcurrency || '',
-    navigator.platform || '',
+    navigator.platform || ''
   ].join('|');
 
-  // Hash SHA-256 via Web Crypto API
-  const encoder = new TextEncoder();
-  const data = encoder.encode(components);
-  const hashBuffer = await crypto.subtle.digest('SHA-256', data);
-  const hashArray = Array.from(new Uint8Array(hashBuffer));
-  const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
-  return hashHex.substring(0, 32); // 32 premiers caractères
+  const encoded = new TextEncoder().encode(raw);
+  const buf     = await crypto.subtle.digest('SHA-256', encoded);
+  const hex     = Array.from(new Uint8Array(buf))
+                       .map(b => b.toString(16).padStart(2,'0'))
+                       .join('');
+  return hex.substring(0, 32);
 }
 
-// ============================================
-// VÉRIFICATION CLÉE URL
-// Lit automatiquement la clé dans l'URL
-// Format : module.html?key=XXXX-XXXX
-// ============================================
-function getKeyFromURL() {
-  const params = new URLSearchParams(window.location.search);
-  return params.get('key') || params.get('KEY') || null;
+// ================================================
+// CLÉ DANS L'URL
+// ================================================
+function getURLKey() {
+  const p = new URLSearchParams(window.location.search);
+  return p.get('key') || p.get('KEY') || null;
 }
 
-// ============================================
-// AFFICHAGE MESSAGES
-// ============================================
-function showMessage(type, text) {
-  const box = document.getElementById('msgBox');
+// ================================================
+// UI HELPERS
+// ================================================
+function showMsg(type, text) {
+  const box  = document.getElementById('msgBox');
   const icon = document.getElementById('msgIcon');
-  const msg = document.getElementById('msgText');
+  const msg  = document.getElementById('msgText');
+  const inp  = document.getElementById('keyInput');
 
-  box.className = 'msg-box show';
+  box.className = 'msg-box show msg-' + type;
   msg.textContent = text;
+  icon.textContent = type === 'error' ? '✗' : '⚠';
 
-  if (type === 'error') {
-    box.classList.add('msg-error');
-    icon.textContent = '✗';
-    document.getElementById('keyInput').classList.add('error');
-    document.getElementById('keyInput').classList.remove('success');
-  } else if (type === 'warn') {
-    box.classList.add('msg-warn');
-    icon.textContent = '⚠';
-  }
+  inp.classList.remove('error','success');
+  if (type === 'error') inp.classList.add('error');
 }
 
-function clearMessage() {
-  const box = document.getElementById('msgBox');
-  box.className = 'msg-box';
-  document.getElementById('keyInput').classList.remove('error', 'success');
+function clearMsg() {
+  document.getElementById('msgBox').className = 'msg-box';
+  document.getElementById('keyInput').classList.remove('error','success');
 }
 
-// ============================================
-// BOUTON ÉTAT
-// ============================================
-function setLoading(state) {
+function setLoading(on) {
   const btn = document.getElementById('btnAccess');
-  if (state) {
-    btn.classList.add('loading');
-    btn.disabled = true;
-  } else {
-    btn.classList.remove('loading');
-    btn.disabled = false;
-  }
+  btn.classList.toggle('loading', on);
+  btn.disabled = on;
 }
 
-// ============================================
-// ACCÈS AUTORISÉ — Afficher le contenu
-// ============================================
-function grantAccess(key, isFirst) {
-  // Marquer la clé dans le localStorage pour
-  // éviter de requêter l'API à chaque rechargement
+// ================================================
+// ACCÈS ACCORDÉ
+// ================================================
+function grantAccess(key) {
   localStorage.setItem('fh_key', key);
-  localStorage.setItem('fh_ts', Date.now());
+  localStorage.setItem('fh_ts',  Date.now());
 
-  // Afficher le contenu
   document.getElementById('gate').classList.remove('active');
   document.getElementById('content').classList.add('active');
 
-  // Afficher la clé dans la top bar
-  const short = key.length > 12 ? key.substring(0, 12) + '...' : key;
+  const short = key.length > 14 ? key.substring(0,14) + '…' : key;
   document.getElementById('accessKeyDisplay').textContent = short;
 
-  // Toast de bienvenue
   const toast = document.getElementById('welcomeToast');
   document.getElementById('toastKey').textContent = 'Clé : ' + key;
-  setTimeout(() => { toast.classList.add('show'); }, 300);
-  setTimeout(() => { toast.classList.remove('show'); }, 5000);
+  setTimeout(() => toast.classList.add('show'),    300);
+  setTimeout(() => toast.classList.remove('show'), 5000);
 }
 
-// ============================================
+// ================================================
 // VÉRIFICATION PRINCIPALE
-// ============================================
+// ================================================
 async function checkAccess() {
-  clearMessage();
+  clearMsg();
 
-  const input = document.getElementById('keyInput');
-  const key = input.value.trim().toUpperCase();
+  const inp = document.getElementById('keyInput');
+  const key = inp.value.trim().toUpperCase();
 
   if (!key || key.length < 3) {
-    showMessage('error', 'Veuillez entrer votre clé d\'accès.');
-    input.focus();
+    showMsg('error', 'Veuillez entrer votre clé d\'accès.');
+    inp.focus();
     return;
   }
 
   setLoading(true);
 
   try {
-    // Générer l'empreinte de l'appareil
-    const deviceHash = await getDeviceFingerprint();
+    const hash = await getFingerprint();
+    const url  = API + '?action=verify&key=' + encodeURIComponent(key) + '&hash=' + hash;
 
-    // Appeler l'API Google Apps Script
-    const url = `${API_URL}?action=verify&key=${encodeURIComponent(key)}&hash=${deviceHash}`;
-    const response = await fetch(url);
-
-    if (!response.ok) {
-      throw new Error('Erreur réseau');
-    }
-
-    const data = await response.json();
+    const res  = await fetch(url);
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    const data = await res.json();
 
     setLoading(false);
 
-    switch (data.status) {
+    if (data.status === 'ok') {
+      inp.classList.add('success');
+      grantAccess(key);
 
-      case 'ok':
-        // Accès autorisé
-        input.classList.add('success');
-        grantAccess(key, data.first);
-        break;
+    } else if (data.status === 'invalid') {
+      showMsg('error', 'Clé introuvable. Vérifiez que vous l\'avez copiée correctement (majuscules et tirets inclus).');
 
-      case 'invalid':
-        showMessage('error', 'Cette clé d\'accès n\'existe pas. Vérifiez que vous l\'avez copiée correctement.');
-        break;
+    } else if (data.status === 'disabled') {
+      showMsg('error', 'Cette clé a été désactivée. Contactez Fame House.');
 
-      case 'disabled':
-        showMessage('error', 'Cette clé d\'accès a été désactivée. Contactez Fame House pour plus d\'informations.');
-        break;
+    } else if (data.status === 'wrong_device') {
+      showMsg('error', 'Cette clé est déjà liée à un autre appareil. Chaque clé est strictement personnelle.');
 
-      case 'wrong_device':
-        showMessage('error', 'Cette clé est liée à un autre appareil. Chaque clé est strictement personnelle et ne peut être utilisée que sur l\'appareil original.');
-        break;
-
-      default:
-        showMessage('error', 'Erreur inattendue. Réessayez dans quelques instants.');
+    } else {
+      showMsg('error', 'Erreur inattendue. Réessayez dans quelques instants.');
     }
 
-  } catch (err) {
+  } catch(err) {
     setLoading(false);
-    showMessage('warn', 'Impossible de vérifier votre clé. Vérifiez votre connexion internet et réessayez.');
-    console.error('Erreur API:', err);
+    showMsg('warn', 'Impossible de vérifier votre clé. Vérifiez votre connexion internet et réessayez.');
+    console.error(err);
   }
 }
 
-// ============================================
-// VÉRIFICATION SESSION LOCALE
-// Si la clé est déjà validée sur cet appareil,
-// on ne requête pas l'API à chaque chargement
-// (valide 7 jours)
-// ============================================
+// ================================================
+// SESSION LOCALE (évite de re-vérifier l'API
+// à chaque rechargement — valide 7 jours)
+// ================================================
 async function checkLocalSession() {
-  const savedKey = localStorage.getItem('fh_key');
-  const savedTs = localStorage.getItem('fh_ts');
+  const key = localStorage.getItem('fh_key');
+  const ts  = localStorage.getItem('fh_ts');
+  if (!key || !ts) return false;
 
-  if (!savedKey || !savedTs) return false;
-
-  // Expiration 7 jours
-  const sevenDays = 7 * 24 * 60 * 60 * 1000;
-  if (Date.now() - parseInt(savedTs) > sevenDays) {
+  const SEVEN_DAYS = 7 * 24 * 60 * 60 * 1000;
+  if (Date.now() - parseInt(ts) > SEVEN_DAYS) {
     localStorage.removeItem('fh_key');
     localStorage.removeItem('fh_ts');
     return false;
   }
 
-  // Vérifier que l'empreinte correspond toujours
-  // (protection si quelqu'un copie le localStorage)
+  // Re-vérifier l'empreinte
   setLoading(true);
   try {
-    const deviceHash = await getDeviceFingerprint();
-    const url = `${API_URL}?action=verify&key=${encodeURIComponent(savedKey)}&hash=${deviceHash}`;
-    const response = await fetch(url);
-    const data = await response.json();
+    const hash = await getFingerprint();
+    const url  = API + '?action=verify&key=' + encodeURIComponent(key) + '&hash=' + hash;
+    const res  = await fetch(url);
+    const data = await res.json();
     setLoading(false);
 
     if (data.status === 'ok') {
-      grantAccess(savedKey, false);
+      grantAccess(key);
       return true;
     } else {
       localStorage.removeItem('fh_key');
@@ -945,58 +723,46 @@ async function checkLocalSession() {
     }
   } catch {
     setLoading(false);
-    // En cas d'erreur réseau, on laisse passer si la session est récente (< 24h)
-    const oneDay = 24 * 60 * 60 * 1000;
-    if (Date.now() - parseInt(savedTs) < oneDay) {
-      grantAccess(savedKey, false);
+    // Offline grace period : si session < 24h, on laisse passer
+    const ONE_DAY = 24 * 60 * 60 * 1000;
+    if (Date.now() - parseInt(ts) < ONE_DAY) {
+      grantAccess(key);
       return true;
     }
     return false;
   }
 }
 
-// ============================================
-// ENTER KEY SUPPORT
-// ============================================
-document.getElementById('keyInput').addEventListener('keydown', function(e) {
+// ================================================
+// EVENTS
+// ================================================
+document.getElementById('keyInput').addEventListener('keydown', e => {
   if (e.key === 'Enter') checkAccess();
 });
 
-// ============================================
-// INPUT FORMATTING
-// Auto-majuscules + tirets automatiques
-// Format : XXXX-XXXX-XXXX
-// ============================================
-document.getElementById('keyInput').addEventListener('input', function(e) {
-  clearMessage();
-  let val = e.target.value.toUpperCase().replace(/[^A-Z0-9-]/g, '');
-  e.target.value = val;
+document.getElementById('keyInput').addEventListener('input', e => {
+  clearMsg();
+  e.target.value = e.target.value.toUpperCase().replace(/[^A-Z0-9-]/g, '');
 });
 
-// ============================================
-// INIT — Au chargement de la page
-// ============================================
+// ================================================
+// INIT
+// ================================================
 window.addEventListener('DOMContentLoaded', async () => {
+  const urlKey = getURLKey();
 
-  // 1. Vérifier si clé dans l'URL
-  const urlKey = getKeyFromURL();
   if (urlKey) {
-    const badge = document.getElementById('urlKeyBadge');
-    const valEl = document.getElementById('urlKeyVal');
-    badge.classList.add('show');
-    valEl.textContent = urlKey.toUpperCase();
+    document.getElementById('urlKeyBadge').classList.add('show');
+    document.getElementById('urlKeyVal').textContent = urlKey.toUpperCase();
     document.getElementById('keyInput').value = urlKey.toUpperCase();
   }
 
-  // 2. Vérifier session locale
   const hasSession = await checkLocalSession();
 
-  // 3. Si clé dans URL et pas de session active → vérifier automatiquement
   if (urlKey && !hasSession) {
-    setTimeout(() => checkAccess(), 800);
+    setTimeout(() => checkAccess(), 600);
   }
 });
 </script>
-
 </body>
 </html>
