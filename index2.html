@@ -1,0 +1,2166 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Formation TikTok — ci.minou.tic</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=DM+Mono:wght@300;400;500&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   VARIABLES & RESET
+   ============================================================ */
+:root {
+  --bg:         #FAFAF8;
+  --bg2:        #F2F0EB;
+  --bg3:        #ECEAE3;
+  --dark:       #1A1410;
+  --grey:       #6B6B6B;
+  --grey-light: #A8A8A8;
+  --border:     rgba(26,20,16,0.08);
+
+  --red:        #FF3B5C;
+  --red-faint:  rgba(255,59,92,0.08);
+  --gold:       #C9952A;
+  --gold-faint: rgba(201,149,42,0.08);
+  --teal:       #00C4B4;
+  --teal-faint: rgba(0,196,180,0.08);
+  --purple:     #8B6FE8;
+  --green:      #34C759;
+
+  --radius-sm:  10px;
+  --radius:     16px;
+  --radius-lg:  24px;
+  --shadow-sm:  0 2px 8px rgba(0,0,0,0.06);
+  --shadow:     0 4px 24px rgba(0,0,0,0.08);
+  --shadow-lg:  0 8px 40px rgba(0,0,0,0.12);
+
+  --sidebar-w:  260px;
+  --topbar-h:   56px;
+}
+
+*,*::before,*::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+body {
+  background: var(--bg);
+  color: var(--dark);
+  font-family: 'Inter', -apple-system, sans-serif;
+  font-size: 15px;
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+img { max-width: 100%; display: block; }
+a { color: inherit; text-decoration: none; }
+button { cursor: pointer; border: none; background: none; font: inherit; }
+
+/* ============================================================
+   GATE SCREEN
+   ============================================================ */
+.screen { display: none; min-height: 100vh; }
+.screen.active { display: flex; }
+
+#gate {
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+  background: var(--dark);
+  position: relative;
+  overflow: hidden;
+}
+
+.gate-glow {
+  position: absolute;
+  width: 600px; height: 600px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(201,149,42,0.08) 0%, transparent 70%);
+  top: 50%; left: 50%;
+  transform: translate(-50%, -60%);
+  pointer-events: none;
+}
+
+.gate-inner {
+  position: relative; z-index: 2;
+  width: 100%; max-width: 420px;
+  display: flex; flex-direction: column; align-items: center;
+}
+
+.gate-logo {
+  width: 72px; height: 72px;
+  background: linear-gradient(135deg, rgba(255,182,193,0.3), rgba(182,182,255,0.3));
+  border-radius: 20px;
+  display: flex; align-items: center; justify-content: center;
+  margin-bottom: 24px;
+  animation: gFadeUp 0.6s ease both;
+}
+
+.gate-logo svg { width: 44px; height: 44px; }
+
+.gate-title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(1.8rem, 5vw, 2.4rem);
+  font-weight: 900;
+  color: #FAFAF8;
+  text-align: center;
+  line-height: 1.15;
+  margin-bottom: 8px;
+  animation: gFadeUp 0.6s ease 0.1s both;
+}
+.gate-title em { font-style: italic; color: var(--gold); }
+
+.gate-sub {
+  font-size: 0.88rem;
+  color: rgba(250,250,248,0.5);
+  text-align: center;
+  margin-bottom: 40px;
+  animation: gFadeUp 0.6s ease 0.15s both;
+}
+
+.url-badge {
+  display: none;
+  align-items: center; gap: 8px;
+  padding: 8px 14px;
+  background: rgba(0,196,180,0.1);
+  border: 1px solid rgba(0,196,180,0.2);
+  border-radius: var(--radius-sm);
+  margin-bottom: 12px; width: 100%;
+}
+.url-badge.show { display: flex; }
+.url-badge span { font-family:'DM Mono',monospace; font-size:0.6rem; letter-spacing:0.12em; color:var(--teal); }
+
+.input-wrap { width: 100%; margin-bottom: 12px; animation: gFadeUp 0.6s ease 0.2s both; }
+.input-label { font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(250,250,248,0.4); margin-bottom: 8px; display: block; font-family: 'DM Mono', monospace; }
+
+.key-input {
+  width: 100%;
+  background: rgba(250,250,248,0.06);
+  border: 1px solid rgba(250,250,248,0.1);
+  border-radius: var(--radius-sm);
+  color: #FAFAF8;
+  font-family: 'DM Mono', monospace;
+  font-size: 1rem; letter-spacing: 0.15em;
+  padding: 14px 18px;
+  outline: none;
+  transition: all 0.2s;
+  text-transform: uppercase;
+}
+.key-input:focus { border-color: rgba(201,149,42,0.4); background: rgba(201,149,42,0.05); }
+.key-input.err { border-color: rgba(255,59,92,0.4); background: rgba(255,59,92,0.05); }
+.key-input.ok  { border-color: rgba(0,196,180,0.4); background: rgba(0,196,180,0.05); }
+
+.btn-gate {
+  width: 100%;
+  background: var(--gold);
+  color: var(--dark);
+  border-radius: var(--radius-sm);
+  font-weight: 600; font-size: 0.85rem; letter-spacing: 0.08em;
+  padding: 15px;
+  transition: all 0.2s;
+  animation: gFadeUp 0.6s ease 0.25s both;
+}
+.btn-gate:hover:not(:disabled) { background: #D4A832; transform: translateY(-1px); box-shadow: 0 4px 16px rgba(201,149,42,0.3); }
+.btn-gate:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.btn-loading { display: none; align-items: center; gap: 8px; justify-content: center; }
+.btn-gate.loading .btn-text    { display: none; }
+.btn-gate.loading .btn-loading { display: inline-flex; }
+.g-spin { width:14px;height:14px;border:2px solid rgba(26,20,16,0.2);border-top-color:var(--dark);border-radius:50%;animation:spin 0.6s linear infinite; }
+
+.msg-box {
+  width: 100%; padding: 12px 16px; border-radius: var(--radius-sm);
+  margin-top: 12px; display: none; align-items: flex-start; gap: 10px;
+  font-size: 0.82rem; line-height: 1.5;
+}
+.msg-box.show { display: flex; }
+.msg-error { background: rgba(255,59,92,0.08); border: 1px solid rgba(255,59,92,0.2); color: #FF6B81; }
+.msg-warn  { background: rgba(201,149,42,0.08); border: 1px solid rgba(201,149,42,0.2); color: var(--gold); }
+
+.gate-note { margin-top: 32px; text-align: center; animation: gFadeUp 0.6s ease 0.3s both; }
+.gate-note p { font-size: 0.72rem; color: rgba(250,250,248,0.2); line-height: 2; font-family: 'DM Mono', monospace; letter-spacing: 0.08em; }
+
+/* ============================================================
+   APP LAYOUT
+   ============================================================ */
+#app { flex-direction: column; background: var(--bg); }
+
+/* TOPBAR */
+.topbar {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+  height: var(--topbar-h);
+  background: rgba(250,250,248,0.85);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 20px;
+}
+
+.topbar-left { display: flex; align-items: center; gap: 12px; }
+
+.menu-toggle {
+  width: 36px; height: 36px;
+  border-radius: 10px;
+  background: var(--bg2);
+  display: flex; align-items: center; justify-content: center;
+  transition: background 0.2s;
+}
+.menu-toggle:hover { background: var(--bg3); }
+.menu-toggle svg { width: 18px; height: 18px; }
+
+.topbar-logo { display: flex; align-items: center; gap: 8px; }
+.topbar-logo-img { width: 28px; height: 28px; }
+.topbar-logo-text { font-family: 'Playfair Display', serif; font-size: 0.9rem; font-weight: 700; color: var(--dark); }
+
+.topbar-right { display: flex; align-items: center; gap: 10px; }
+
+/* Progress bar */
+.progress-wrap { display: flex; align-items: center; gap: 8px; }
+.progress-bar {
+  width: 100px; height: 4px;
+  background: var(--bg3);
+  border-radius: 2px;
+  overflow: hidden;
+}
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--red), var(--gold));
+  border-radius: 2px;
+  transition: width 0.4s ease;
+  width: 0%;
+}
+.progress-text { font-family: 'DM Mono', monospace; font-size: 0.65rem; color: var(--grey-light); white-space: nowrap; }
+
+.access-badge {
+  display: flex; align-items: center; gap: 6px;
+  padding: 4px 10px;
+  background: rgba(52,199,89,0.1);
+  border: 1px solid rgba(52,199,89,0.2);
+  border-radius: 20px;
+  font-family: 'DM Mono', monospace;
+  font-size: 0.6rem; letter-spacing: 0.1em;
+  color: var(--green);
+}
+.access-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--green); animation: pulse-green 2s infinite; }
+
+/* MAIN CONTAINER */
+.app-body {
+  display: flex;
+  padding-top: var(--topbar-h);
+  min-height: 100vh;
+}
+
+/* SIDEBAR */
+.sidebar {
+  width: var(--sidebar-w);
+  flex-shrink: 0;
+  position: fixed;
+  top: var(--topbar-h); left: 0; bottom: 0;
+  background: var(--bg);
+  border-right: 1px solid var(--border);
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 16px 12px 80px;
+  transition: transform 0.3s cubic-bezier(0.4,0,0.2,1);
+  z-index: 150;
+  scrollbar-width: thin;
+  scrollbar-color: var(--bg3) transparent;
+}
+
+.sidebar::-webkit-scrollbar { width: 4px; }
+.sidebar::-webkit-scrollbar-track { background: transparent; }
+.sidebar::-webkit-scrollbar-thumb { background: var(--bg3); border-radius: 2px; }
+
+.sidebar.hidden { transform: translateX(-100%); }
+
+.sidebar-section-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.6rem; letter-spacing: 0.15em; text-transform: uppercase;
+  color: var(--grey-light);
+  padding: 8px 10px 4px;
+  margin-top: 8px;
+}
+
+.nav-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 9px 10px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: all 0.15s;
+  position: relative;
+}
+.nav-item:hover { background: var(--bg2); }
+.nav-item.active { background: var(--red-faint); }
+
+.nav-num {
+  width: 22px; height: 22px; border-radius: 7px;
+  background: var(--bg2);
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'DM Mono', monospace;
+  font-size: 0.6rem; font-weight: 500;
+  color: var(--grey);
+  flex-shrink: 0;
+  transition: all 0.15s;
+}
+.nav-item.active .nav-num { background: var(--red); color: white; }
+.nav-item.done .nav-num { background: var(--green); color: white; }
+
+.nav-label {
+  font-size: 0.78rem;
+  color: var(--grey);
+  line-height: 1.3;
+  transition: color 0.15s;
+}
+.nav-item.active .nav-label { color: var(--dark); font-weight: 500; }
+.nav-item.done .nav-label { color: var(--grey); }
+
+.nav-check {
+  margin-left: auto;
+  width: 16px; height: 16px;
+  border-radius: 50%;
+  background: var(--green);
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0;
+  transition: opacity 0.2s;
+  flex-shrink: 0;
+}
+.nav-item.done .nav-check { opacity: 1; }
+.nav-check svg { width: 10px; height: 10px; }
+
+.nav-sub-item {
+  display: flex; align-items: center; gap: 8px;
+  padding: 6px 10px 6px 20px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.nav-sub-item:hover { background: var(--bg2); }
+.nav-sub-item.active { background: var(--red-faint); }
+.nav-sub-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--bg3); flex-shrink: 0; transition: background 0.15s; }
+.nav-sub-item.active .nav-sub-dot { background: var(--red); }
+.nav-sub-label { font-size: 0.73rem; color: var(--grey); }
+.nav-sub-item.active .nav-sub-label { color: var(--dark); }
+
+/* Sidebar overlay (mobile) */
+.sidebar-overlay {
+  display: none;
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.3);
+  z-index: 140;
+}
+.sidebar-overlay.show { display: block; }
+
+/* MAIN CONTENT */
+.main {
+  flex: 1;
+  margin-left: var(--sidebar-w);
+  transition: margin-left 0.3s cubic-bezier(0.4,0,0.2,1);
+  min-width: 0;
+}
+.main.full { margin-left: 0; }
+
+/* ============================================================
+   SECTION PANELS
+   ============================================================ */
+.section-panel {
+  display: none;
+  padding: 40px 40px 80px;
+  max-width: 760px;
+  margin: 0 auto;
+  animation: panelIn 0.3s ease;
+}
+.section-panel.active { display: block; }
+
+@keyframes panelIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Section header */
+.section-hero {
+  margin-bottom: 40px;
+  padding-bottom: 32px;
+  border-bottom: 1px solid var(--border);
+}
+.section-tag {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-family: 'DM Mono', monospace;
+  font-size: 0.62rem; letter-spacing: 0.12em; text-transform: uppercase;
+  margin-bottom: 16px;
+}
+.tag-red    { background: var(--red-faint);  color: var(--red); }
+.tag-gold   { background: var(--gold-faint); color: var(--gold); }
+.tag-teal   { background: var(--teal-faint); color: var(--teal); }
+.tag-purple { background: rgba(139,111,232,0.08); color: var(--purple); }
+
+.section-h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(1.8rem, 4vw, 2.6rem);
+  font-weight: 900;
+  line-height: 1.1;
+  color: var(--dark);
+  margin-bottom: 12px;
+}
+.section-h1 em { font-style: italic; color: var(--red); }
+
+.section-lead {
+  font-size: 1rem;
+  color: var(--grey);
+  line-height: 1.7;
+  max-width: 560px;
+}
+
+/* ============================================================
+   CONTENT BLOCKS
+   ============================================================ */
+
+/* Prose */
+.prose h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.35rem; font-weight: 700;
+  color: var(--dark);
+  margin: 36px 0 12px;
+  line-height: 1.3;
+}
+.prose h3 {
+  font-size: 1rem; font-weight: 600;
+  color: var(--dark);
+  margin: 24px 0 8px;
+}
+.prose p {
+  color: var(--grey);
+  line-height: 1.8;
+  margin-bottom: 16px;
+  font-size: 0.95rem;
+}
+.prose p strong { color: var(--dark); font-weight: 600; }
+.prose p em { font-style: italic; }
+
+/* Highlight quote */
+.highlight-quote {
+  border-left: 3px solid var(--red);
+  padding: 16px 20px;
+  background: var(--red-faint);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  margin: 24px 0;
+}
+.highlight-quote p {
+  color: var(--dark);
+  font-size: 0.95rem;
+  line-height: 1.7;
+  margin: 0;
+  font-weight: 500;
+}
+
+.highlight-gold {
+  border-left: 3px solid var(--gold);
+  padding: 16px 20px;
+  background: var(--gold-faint);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  margin: 24px 0;
+}
+.highlight-gold p { color: var(--dark); font-size: 0.95rem; line-height: 1.7; margin: 0; }
+
+/* Key takeaways */
+.takeaways {
+  background: var(--bg2);
+  border-radius: var(--radius);
+  padding: 24px;
+  margin: 32px 0;
+}
+.takeaways-title {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.65rem; letter-spacing: 0.15em; text-transform: uppercase;
+  color: var(--grey-light);
+  margin-bottom: 16px;
+}
+.takeaway-item {
+  display: flex; align-items: flex-start; gap: 10px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border);
+}
+.takeaway-item:last-child { border-bottom: none; }
+.takeaway-dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--red);
+  flex-shrink: 0;
+  margin-top: 7px;
+}
+.takeaway-text { font-size: 0.88rem; color: var(--dark); line-height: 1.5; }
+
+/* Exercise block */
+.exercise {
+  background: linear-gradient(135deg, rgba(255,59,92,0.04), rgba(201,149,42,0.04));
+  border: 1px solid rgba(255,59,92,0.12);
+  border-radius: var(--radius);
+  padding: 24px;
+  margin: 32px 0;
+}
+.exercise-header {
+  display: flex; align-items: center; gap: 10px;
+  margin-bottom: 16px;
+}
+.exercise-icon {
+  width: 36px; height: 36px; border-radius: 10px;
+  background: var(--red);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1rem;
+  flex-shrink: 0;
+}
+.exercise-title { font-weight: 600; font-size: 0.9rem; color: var(--dark); }
+.exercise-subtitle { font-size: 0.75rem; color: var(--grey); }
+.exercise-body { font-size: 0.88rem; color: var(--grey); line-height: 1.7; }
+.exercise-body strong { color: var(--dark); }
+
+/* Proof block */
+.proof-block {
+  background: var(--bg2);
+  border-radius: var(--radius);
+  padding: 24px;
+  margin: 32px 0;
+  border: 1px solid var(--border);
+}
+.proof-header {
+  display: flex; align-items: center; gap: 8px;
+  margin-bottom: 16px;
+}
+.proof-tag {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.6rem; letter-spacing: 0.15em; text-transform: uppercase;
+  color: var(--gold);
+  background: var(--gold-faint);
+  padding: 3px 10px; border-radius: 20px;
+}
+.proof-text { font-size: 0.88rem; color: var(--grey); line-height: 1.7; }
+.proof-text strong { color: var(--dark); }
+
+/* Stats row */
+.stats-row {
+  display: flex; gap: 12px; flex-wrap: wrap;
+  margin: 20px 0;
+}
+.stat-pill {
+  display: flex; align-items: center; gap: 8px;
+  padding: 10px 16px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  flex: 1; min-width: 100px;
+}
+.stat-num {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.4rem; font-weight: 900;
+  color: var(--red);
+  line-height: 1;
+}
+.stat-label { font-size: 0.72rem; color: var(--grey); }
+
+/* Links */
+.proof-link {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 6px 12px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-size: 0.75rem; color: var(--teal);
+  font-family: 'DM Mono', monospace;
+  margin-top: 12px;
+  transition: all 0.2s;
+  word-break: break-all;
+}
+.proof-link:hover { background: var(--teal-faint); border-color: rgba(0,196,180,0.2); }
+
+/* Mark complete */
+.mark-done-wrap { margin-top: 48px; padding-top: 32px; border-top: 1px solid var(--border); text-align: center; }
+.btn-done {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 12px 24px;
+  background: var(--green);
+  color: white;
+  border-radius: var(--radius-sm);
+  font-weight: 600; font-size: 0.85rem;
+  transition: all 0.2s;
+}
+.btn-done:hover { transform: translateY(-1px); box-shadow: 0 4px 16px rgba(52,199,89,0.3); }
+.btn-done.done-state { background: var(--bg2); color: var(--grey); }
+
+/* ============================================================
+   ANIMATIONS / MOTION DESIGN
+   ============================================================ */
+
+/* Funnel TOFU/MOFU/BOFU */
+.funnel-viz {
+  margin: 32px 0;
+  display: flex; flex-direction: column; align-items: center; gap: 3px;
+}
+.funnel-layer {
+  border-radius: var(--radius-sm);
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 14px 20px;
+  transition: transform 0.2s;
+  cursor: default;
+}
+.funnel-layer:hover { transform: scaleX(1.02); }
+.funnel-tofu  { background: rgba(255,59,92,0.1);  border: 1px solid rgba(255,59,92,0.2);  width: 100%; }
+.funnel-mofu  { background: rgba(201,149,42,0.1); border: 1px solid rgba(201,149,42,0.2); width: 78%; }
+.funnel-bofu  { background: rgba(0,196,180,0.1);  border: 1px solid rgba(0,196,180,0.2);  width: 56%; }
+.funnel-label { font-weight: 700; font-size: 0.85rem; }
+.funnel-tofu  .funnel-label { color: var(--red); }
+.funnel-mofu  .funnel-label { color: var(--gold); }
+.funnel-bofu  .funnel-label { color: var(--teal); }
+.funnel-desc { font-size: 0.75rem; color: var(--grey); text-align: right; max-width: 180px; line-height: 1.4; }
+.funnel-pct { font-family: 'DM Mono', monospace; font-size: 0.7rem; opacity: 0.6; }
+
+/* Hook/Tension/Resolution blocks */
+.story-blocks {
+  display: flex; gap: 8px; margin: 28px 0;
+  flex-wrap: wrap;
+}
+.story-block {
+  flex: 1; min-width: 120px;
+  border-radius: var(--radius);
+  padding: 20px;
+  position: relative;
+  overflow: hidden;
+}
+.story-block::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0; height: 3px;
+}
+.story-hook   { background: rgba(255,59,92,0.06); }
+.story-hook::before { background: var(--red); }
+.story-tension { background: rgba(201,149,42,0.06); }
+.story-tension::before { background: var(--gold); }
+.story-resolution { background: rgba(0,196,180,0.06); }
+.story-resolution::before { background: var(--teal); }
+
+.story-block-num {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.6rem; letter-spacing: 0.1em;
+  color: var(--grey-light);
+  margin-bottom: 6px;
+}
+.story-block-title {
+  font-weight: 700; font-size: 0.9rem;
+  margin-bottom: 8px;
+}
+.story-hook .story-block-title { color: var(--red); }
+.story-tension .story-block-title { color: var(--gold); }
+.story-resolution .story-block-title { color: var(--teal); }
+.story-block-desc { font-size: 0.78rem; color: var(--grey); line-height: 1.5; }
+
+/* 80/20 visual */
+.pie-visual {
+  display: flex; align-items: center; gap: 24px;
+  padding: 24px;
+  background: var(--bg2);
+  border-radius: var(--radius);
+  margin: 24px 0;
+  flex-wrap: wrap;
+}
+.pie-chart {
+  width: 80px; height: 80px; border-radius: 50%;
+  background: conic-gradient(var(--teal) 0% 80%, var(--red) 80% 100%);
+  flex-shrink: 0;
+  box-shadow: var(--shadow-sm);
+}
+.pie-legend { display: flex; flex-direction: column; gap: 8px; }
+.pie-legend-item { display: flex; align-items: center; gap: 8px; }
+.pie-dot { width: 10px; height: 10px; border-radius: 3px; flex-shrink: 0; }
+.pie-legend-text { font-size: 0.82rem; color: var(--dark); }
+.pie-legend-text span { color: var(--grey); font-size: 0.75rem; }
+
+/* Algorithm circles */
+.algo-viz {
+  display: flex; align-items: center; justify-content: center;
+  gap: 0; padding: 32px 16px; position: relative;
+  flex-wrap: nowrap; overflow: hidden;
+}
+.algo-circle {
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  text-align: center;
+  flex-direction: column;
+  padding: 12px;
+  border: 2px solid;
+  position: relative;
+  flex-shrink: 0;
+  transition: transform 0.3s ease;
+  animation: pulse-ring 3s ease infinite;
+}
+.algo-circle:hover { transform: scale(1.05); }
+.algo-c1 { width: 80px; height: 80px; border-color: rgba(255,59,92,0.3); background: rgba(255,59,92,0.05); animation-delay: 0s; }
+.algo-c2 { width: 110px; height: 110px; border-color: rgba(201,149,42,0.3); background: rgba(201,149,42,0.05); animation-delay: 0.5s; margin-left: -20px; }
+.algo-c3 { width: 140px; height: 140px; border-color: rgba(0,196,180,0.3); background: rgba(0,196,180,0.05); animation-delay: 1s; margin-left: -30px; }
+.algo-num { font-family: 'Playfair Display', serif; font-size: 1.1rem; font-weight: 900; line-height: 1; }
+.algo-c1 .algo-num { color: var(--red); font-size: 0.9rem; }
+.algo-c2 .algo-num { color: var(--gold); }
+.algo-c3 .algo-num { color: var(--teal); font-size: 1.3rem; }
+.algo-label { font-size: 0.55rem; color: var(--grey); font-family: 'DM Mono', monospace; letter-spacing: 0.05em; margin-top: 2px; }
+
+/* Attention curve */
+.attention-curve {
+  padding: 24px;
+  background: var(--bg2);
+  border-radius: var(--radius);
+  margin: 24px 0;
+}
+.attention-title { font-size: 0.75rem; color: var(--grey); font-family: 'DM Mono', monospace; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 16px; }
+.curve-svg { width: 100%; height: 80px; }
+
+/* Gear checklist */
+.gear-list { display: flex; flex-direction: column; gap: 8px; margin: 20px 0; }
+.gear-item {
+  display: flex; align-items: center; gap: 14px;
+  padding: 14px 16px;
+  background: var(--bg2);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  transition: all 0.2s;
+}
+.gear-item:hover { background: var(--bg3); }
+.gear-num {
+  width: 28px; height: 28px; border-radius: 8px;
+  background: var(--dark);
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'DM Mono', monospace;
+  font-size: 0.65rem; font-weight: 500;
+  color: var(--gold);
+  flex-shrink: 0;
+}
+.gear-info { flex: 1; }
+.gear-name { font-weight: 600; font-size: 0.88rem; color: var(--dark); }
+.gear-desc { font-size: 0.75rem; color: var(--grey); margin-top: 2px; }
+.gear-badge { font-family: 'DM Mono', monospace; font-size: 0.6rem; color: var(--grey-light); background: var(--bg); padding: 2px 8px; border-radius: 20px; border: 1px solid var(--border); white-space: nowrap; }
+
+/* 30 days calendar */
+.calendar-weeks { display: flex; flex-direction: column; gap: 8px; margin: 24px 0; }
+.week-row {
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  border: 1px solid var(--border);
+}
+.week-header {
+  display: flex; align-items: center; gap: 12px;
+  padding: 12px 16px;
+  font-weight: 600; font-size: 0.85rem;
+}
+.week-1 .week-header { background: rgba(255,59,92,0.06); color: var(--red); }
+.week-2 .week-header { background: rgba(201,149,42,0.06); color: var(--gold); }
+.week-3 .week-header { background: rgba(139,111,232,0.06); color: var(--purple); }
+.week-4 .week-header { background: rgba(0,196,180,0.06); color: var(--teal); }
+.week-body { padding: 12px 16px; background: var(--bg); }
+.week-items { display: flex; flex-direction: column; gap: 6px; }
+.week-item {
+  display: flex; align-items: flex-start; gap: 8px;
+  font-size: 0.82rem; color: var(--grey);
+}
+.week-item::before { content: '→'; color: var(--grey-light); flex-shrink: 0; margin-top: 1px; }
+
+/* 80/20 inline */
+.ratio-bar {
+  display: flex; border-radius: var(--radius-sm); overflow: hidden; height: 8px; margin: 12px 0;
+}
+.ratio-give { background: var(--teal); flex: 80; }
+.ratio-show { background: var(--red); flex: 20; }
+
+/* Authenticity check */
+.auth-checks { display: flex; flex-direction: column; gap: 8px; margin: 16px 0; }
+.auth-check {
+  display: flex; align-items: flex-start; gap: 12px;
+  padding: 14px 16px;
+  background: var(--bg2);
+  border-radius: var(--radius-sm);
+}
+.auth-check-q { font-weight: 600; font-size: 0.85rem; color: var(--dark); margin-bottom: 3px; }
+.auth-check-a { font-size: 0.78rem; color: var(--grey); }
+.auth-check-icon {
+  width: 28px; height: 28px; border-radius: 8px;
+  background: var(--gold-faint);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.9rem;
+  flex-shrink: 0;
+}
+
+/* Identifiability cards */
+.id-cards { display: flex; gap: 8px; flex-wrap: wrap; margin: 20px 0; }
+.id-card {
+  flex: 1; min-width: 140px;
+  padding: 16px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  text-align: center;
+}
+.id-card-icon { font-size: 1.5rem; margin-bottom: 8px; }
+.id-card-title { font-weight: 700; font-size: 0.82rem; color: var(--dark); margin-bottom: 4px; }
+.id-card-desc { font-size: 0.72rem; color: var(--grey); line-height: 1.4; }
+
+/* Profile checklist */
+.profile-items { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 20px 0; }
+.profile-item {
+  padding: 14px;
+  background: var(--bg2);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+}
+.profile-item-icon { font-size: 1.2rem; margin-bottom: 6px; }
+.profile-item-title { font-weight: 600; font-size: 0.82rem; color: var(--dark); margin-bottom: 3px; }
+.profile-item-desc { font-size: 0.72rem; color: var(--grey); line-height: 1.4; }
+
+/* Error cards */
+.error-cards { display: flex; flex-direction: column; gap: 6px; margin: 20px 0; }
+.error-card {
+  display: flex; align-items: flex-start; gap: 12px;
+  padding: 14px 16px;
+  background: var(--bg2);
+  border-radius: var(--radius-sm);
+  border-left: 3px solid var(--red);
+}
+.error-num {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.7rem; font-weight: 700;
+  color: var(--red);
+  flex-shrink: 0; margin-top: 2px;
+}
+.error-title { font-weight: 600; font-size: 0.85rem; color: var(--dark); margin-bottom: 3px; }
+.error-desc { font-size: 0.78rem; color: var(--grey); line-height: 1.5; }
+
+/* Framework list */
+.framework-list { display: flex; flex-direction: column; gap: 6px; margin: 16px 0; }
+.framework-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 14px;
+  background: var(--bg2);
+  border-radius: var(--radius-sm);
+}
+.framework-arrow { color: var(--red); font-weight: 700; flex-shrink: 0; }
+.framework-text { font-size: 0.85rem; color: var(--dark); }
+
+/* Motivation section */
+.motivation-block {
+  background: linear-gradient(135deg, var(--dark) 0%, #2A1810 100%);
+  border-radius: var(--radius-lg);
+  padding: 40px;
+  margin: 32px 0;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.motivation-block::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse 80% 50% at 50% 0%, rgba(201,149,42,0.15) 0%, transparent 70%);
+  pointer-events: none;
+}
+.motivation-quote {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(1.2rem, 3vw, 1.8rem);
+  font-style: italic;
+  font-weight: 700;
+  color: #FAFAF8;
+  line-height: 1.4;
+  margin-bottom: 24px;
+  position: relative; z-index: 1;
+}
+.motivation-quote em { color: var(--gold); font-style: normal; }
+.motivation-sub {
+  font-size: 0.88rem;
+  color: rgba(250,250,248,0.5);
+  position: relative; z-index: 1;
+  line-height: 1.7;
+  max-width: 480px;
+  margin: 0 auto 24px;
+}
+.motivation-sig {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.7rem; letter-spacing: 0.15em;
+  color: var(--gold);
+  position: relative; z-index: 1;
+}
+
+/* Toast */
+.toast {
+  position: fixed; top: 70px; right: 20px;
+  background: var(--dark);
+  border: 1px solid rgba(52,199,89,0.3);
+  border-left: 3px solid var(--green);
+  border-radius: var(--radius-sm);
+  padding: 14px 18px;
+  max-width: 300px; z-index: 999;
+  transform: translateX(120%);
+  transition: transform 0.4s cubic-bezier(0.34,1.56,0.64,1);
+}
+.toast.show { transform: translateX(0); }
+.toast-title { font-size: 0.75rem; font-weight: 600; color: var(--green); margin-bottom: 3px; }
+.toast-body  { font-size: 0.78rem; color: rgba(250,250,248,0.6); }
+
+/* ============================================================
+   KEYFRAMES
+   ============================================================ */
+@keyframes gFadeUp  { from { opacity:0; transform:translateY(16px); } to { opacity:1; transform:translateY(0); } }
+@keyframes spin     { to { transform: rotate(360deg); } }
+@keyframes pulse-green { 0%,100%{opacity:1} 50%{opacity:0.4} }
+@keyframes pulse-ring { 0%,100%{opacity:1} 50%{opacity:0.7} }
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+@media (max-width: 768px) {
+  :root { --sidebar-w: 240px; }
+
+  .sidebar {
+    transform: translateX(-100%);
+  }
+  .sidebar.mobile-open {
+    transform: translateX(0);
+    box-shadow: var(--shadow-lg);
+  }
+
+  .main { margin-left: 0; }
+
+  .section-panel { padding: 24px 20px 60px; }
+
+  .progress-wrap { display: none; }
+
+  .story-blocks { flex-direction: column; }
+  .id-cards { flex-direction: column; }
+  .profile-items { grid-template-columns: 1fr; }
+
+  .algo-viz { transform: scale(0.85); transform-origin: center; }
+
+  .topbar { padding: 0 14px; }
+}
+
+@media (min-width: 769px) {
+  .sidebar { transform: translateX(0) !important; }
+  .sidebar.hidden { transform: translateX(-100%) !important; }
+  .main.full { margin-left: 0; }
+  .sidebar-overlay { display: none !important; }
+}
+
+@media (max-width: 480px) {
+  .stats-row { flex-direction: column; }
+  .pie-visual { flex-direction: column; align-items: flex-start; }
+}
+</style>
+</head>
+<body>
+
+<!-- ============================================================
+     GATE SCREEN
+     ============================================================ -->
+<div id="gate" class="screen active">
+  <div class="gate-glow"></div>
+  <div class="gate-inner">
+
+    <!-- Logo -->
+    <div class="gate-logo">
+      <img src="https://i.imgur.com/placeholder.png" alt="ci.minou.tic" style="width:44px;height:44px;object-fit:contain;" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+      <div style="display:none;align-items:center;justify-content:center;width:44px;height:44px;">
+        <svg viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="22" cy="22" r="16" stroke="url(#g1)" stroke-width="2.5" fill="none"/>
+          <path d="M15 22 L22 15 L29 22 L22 29 Z" stroke="url(#g1)" stroke-width="1.5" fill="none"/>
+          <path d="M22 8 Q28 14 28 22 Q28 30 22 36" stroke="url(#g2)" stroke-width="1.5" fill="none"/>
+          <circle cx="32" cy="12" r="2" fill="url(#g2)"/>
+          <defs>
+            <linearGradient id="g1" x1="0" y1="0" x2="44" y2="44"><stop stop-color="#FFB6C1"/><stop offset="1" stop-color="#B6B6FF"/></linearGradient>
+            <linearGradient id="g2" x1="0" y1="0" x2="44" y2="44"><stop stop-color="#C9952A"/><stop offset="1" stop-color="#B6B6FF"/></linearGradient>
+          </defs>
+        </svg>
+      </div>
+    </div>
+
+    <h1 class="gate-title">Formation<br><em>TikTok</em></h1>
+    <p class="gate-sub">par ci.minou.tic — Entrez votre clé d'accès personnelle</p>
+
+    <div class="url-badge" id="urlBadge">
+      <span>🔑</span>
+      <span>Clé détectée :</span>
+      <span id="urlKeyVal" style="color:rgba(0,196,180,0.8);font-size:0.65rem;"></span>
+    </div>
+
+    <div class="input-wrap">
+      <label class="input-label" for="keyInput">Clé d'accès</label>
+      <input type="text" id="keyInput" class="key-input" placeholder="XXXX-XXXX-XXXX" maxlength="30" autocomplete="off" spellcheck="false"/>
+    </div>
+
+    <button class="btn-gate" id="btnGate" onclick="checkAccess()">
+      <span class="btn-text">Accéder à la formation →</span>
+      <span class="btn-loading"><span class="g-spin"></span> Vérification...</span>
+    </button>
+
+    <div class="msg-box" id="msgBox">
+      <span id="msgIcon"></span>
+      <span id="msgText"></span>
+    </div>
+
+    <div class="gate-note">
+      <p>Accès personnel — lié à votre appareil</p>
+      <p>Pas de clé ? Contactez ci.minou.tic</p>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     APP SCREEN
+     ============================================================ -->
+<div id="app" class="screen">
+
+  <!-- Topbar -->
+  <div class="topbar">
+    <div class="topbar-left">
+      <button class="menu-toggle" onclick="toggleSidebar()" aria-label="Menu">
+        <svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+          <line x1="2" y1="5" x2="16" y2="5"/>
+          <line x1="2" y1="9" x2="16" y2="9"/>
+          <line x1="2" y1="13" x2="16" y2="13"/>
+        </svg>
+      </button>
+      <div class="topbar-logo">
+        <svg class="topbar-logo-img" viewBox="0 0 28 28" fill="none">
+          <circle cx="14" cy="14" r="10" stroke="url(#tg1)" stroke-width="1.5" fill="none"/>
+          <path d="M10 14 L14 10 L18 14 L14 18 Z" stroke="url(#tg1)" stroke-width="1" fill="none"/>
+          <circle cx="20" cy="8" r="1.5" fill="url(#tg2)"/>
+          <defs>
+            <linearGradient id="tg1" x1="0" y1="0" x2="28" y2="28"><stop stop-color="#FFB6C1"/><stop offset="1" stop-color="#B6B6FF"/></linearGradient>
+            <linearGradient id="tg2" x1="0" y1="0" x2="28" y2="28"><stop stop-color="#C9952A"/><stop offset="1" stop-color="#B6B6FF"/></linearGradient>
+          </defs>
+        </svg>
+        <span class="topbar-logo-text">ci.minou.tic</span>
+      </div>
+    </div>
+    <div class="topbar-right">
+      <div class="progress-wrap">
+        <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+        <span class="progress-text" id="progressText">0%</span>
+      </div>
+      <div class="access-badge">
+        <div class="access-dot"></div>
+        <span id="accessKey">—</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Sidebar overlay (mobile) -->
+  <div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
+
+  <!-- App body -->
+  <div class="app-body">
+
+    <!-- Sidebar -->
+    <nav class="sidebar" id="sidebar">
+
+      <div class="sidebar-section-label">Formation</div>
+
+      <div class="nav-item active" onclick="showSection('s1')" id="nav-s1">
+        <div class="nav-num">1</div>
+        <div class="nav-label">La psychologie</div>
+        <div class="nav-check"><svg viewBox="0 0 10 10" fill="none" stroke="white" stroke-width="1.5"><polyline points="2,5 4,7 8,3"/></svg></div>
+      </div>
+
+      <div class="nav-item" onclick="showSection('s2')" id="nav-s2">
+        <div class="nav-num">2</div>
+        <div class="nav-label">B2B ou B2C ?</div>
+        <div class="nav-check"><svg viewBox="0 0 10 10" fill="none" stroke="white" stroke-width="1.5"><polyline points="2,5 4,7 8,3"/></svg></div>
+      </div>
+
+      <div class="sidebar-section-label">Blueprint</div>
+
+      <div class="nav-item" onclick="showSection('s31')" id="nav-s31">
+        <div class="nav-num">3.1</div>
+        <div class="nav-label">La niche</div>
+        <div class="nav-check"><svg viewBox="0 0 10 10" fill="none" stroke="white" stroke-width="1.5"><polyline points="2,5 4,7 8,3"/></svg></div>
+      </div>
+      <div class="nav-item" onclick="showSection('s32')" id="nav-s32">
+        <div class="nav-num">3.2</div>
+        <div class="nav-label">Vertical ou horizontal</div>
+        <div class="nav-check"><svg viewBox="0 0 10 10" fill="none" stroke="white" stroke-width="1.5"><polyline points="2,5 4,7 8,3"/></svg></div>
+      </div>
+      <div class="nav-item" onclick="showSection('s33')" id="nav-s33">
+        <div class="nav-num">3.3</div>
+        <div class="nav-label">Authenticité > Perfection</div>
+        <div class="nav-check"><svg viewBox="0 0 10 10" fill="none" stroke="white" stroke-width="1.5"><polyline points="2,5 4,7 8,3"/></svg></div>
+      </div>
+      <div class="nav-item" onclick="showSection('s34')" id="nav-s34">
+        <div class="nav-num">3.4</div>
+        <div class="nav-label">L'identifiabilité</div>
+        <div class="nav-check"><svg viewBox="0 0 10 10" fill="none" stroke="white" stroke-width="1.5"><polyline points="2,5 4,7 8,3"/></svg></div>
+      </div>
+      <div class="nav-item" onclick="showSection('s35')" id="nav-s35">
+        <div class="nav-num">3.5</div>
+        <div class="nav-label">Ventes indirectes</div>
+        <div class="nav-check"><svg viewBox="0 0 10 10" fill="none" stroke="white" stroke-width="1.5"><polyline points="2,5 4,7 8,3"/></svg></div>
+      </div>
+      <div class="nav-item" onclick="showSection('s36')" id="nav-s36">
+        <div class="nav-num">3.6</div>
+        <div class="nav-label">Le storytelling</div>
+        <div class="nav-check"><svg viewBox="0 0 10 10" fill="none" stroke="white" stroke-width="1.5"><polyline points="2,5 4,7 8,3"/></svg></div>
+      </div>
+      <div class="nav-item" onclick="showSection('s37')" id="nav-s37">
+        <div class="nav-num">3.7</div>
+        <div class="nav-label">L'algorithme</div>
+        <div class="nav-check"><svg viewBox="0 0 10 10" fill="none" stroke="white" stroke-width="1.5"><polyline points="2,5 4,7 8,3"/></svg></div>
+      </div>
+
+      <div class="sidebar-section-label">Suite</div>
+
+      <div class="nav-item" onclick="showSection('s4')" id="nav-s4">
+        <div class="nav-num">4</div>
+        <div class="nav-label">Le Gear</div>
+        <div class="nav-check"><svg viewBox="0 0 10 10" fill="none" stroke="white" stroke-width="1.5"><polyline points="2,5 4,7 8,3"/></svg></div>
+      </div>
+      <div class="nav-item" onclick="showSection('s5')" id="nav-s5">
+        <div class="nav-num">5</div>
+        <div class="nav-label">Démarrer sur TikTok</div>
+        <div class="nav-check"><svg viewBox="0 0 10 10" fill="none" stroke="white" stroke-width="1.5"><polyline points="2,5 4,7 8,3"/></svg></div>
+      </div>
+    </nav>
+
+    <!-- Main content -->
+    <main class="main" id="mainContent">
+
+      <!-- ====== SECTION 1 ====== -->
+      <div class="section-panel active" id="s1">
+        <div class="section-hero">
+          <div class="section-tag tag-red">Section 01</div>
+          <h1 class="section-h1">La psychologie derrière<br>la <em>création de contenu</em></h1>
+          <p class="section-lead">Pourquoi TikTok est accessible à tous mais limitless pour certains.</p>
+        </div>
+
+        <div class="prose">
+          <p><strong>Combien de choses vous a appris TikTok que la vie ne vous a jamais enseigné ?</strong></p>
+          <p>La recette exacte d'un plat que vous faites depuis des années mais jamais aussi bien. Comment utiliser correctement la machine à laver. Une technique de négociation. Un hack de productivité. Comment plier ses vêtements….</p>
+          <p>Et la personne qui vous a appris tout ça — ne le savait pas comme vous au départ. Mais au lieu de garder pour elle, elle a décidé de partager. Gratuitement, sans rien demander en retour.</p>
+          <p>Si seulement notre pays avait une telle transparence….</p>
+          <p>Un téléphone. Une idée. Et 60 secondes suffisent maintenant pour gagner 30 ans de connaissances.</p>
+          <p><em>"Here's something I didn't know until I was in my thirties…" vous avez la ref ou pas ? 👀</em></p>
+
+          <h2>Comprends ceci d'abord.</h2>
+          <p>TikTok a cassé quelque chose de fondamental : le <strong>Gatekeeping</strong>. Tu gardes tout pour toi ? Même ton projet que tu veux promouvoir ne voudra plus de toi. Tu vas alors sur d'autres réseaux ? Ils font tous comme TikTok, donc ça ne marchera pas.</p>
+        </div>
+
+        <div class="highlight-quote">
+          <p>La seule autorité qui compte c'est <strong>l'attention</strong>. Si les gens regardent — tu existes. Si les gens restent — tu as quelque chose à dire. Si les gens reviennent — tu as construit quelque chose.</p>
+        </div>
+
+        <div class="prose">
+          <p><em>Qu'est-ce que vous êtes prêt à partager gratuitement pour ensuite vendre ?</em> Essayez d'y répondre avant de continuer.</p>
+
+          <h2>Ah ! et la niche dans tout ça ?</h2>
+          <p>On va en parler en détail dans le Blueprint (section 3) — mais retenez déjà ça :</p>
+          <p><em>TikTok ne distribue pas vos vidéos en fonction de votre compte. Il distribue chaque vidéo individuellement en fonction de ce qu'elle provoque chez ceux qui la regardent.</em></p>
+          <p>C'est pour ça que quelqu'un avec 800 followers peut faire 40 000 vues. Et c'est pour ça que la question n'est pas <em>"comment je fais grossir mon compte"</em> — la question c'est <em>"comment je fais une vidéo que les gens ont envie de regarder jusqu'au bout."</em></p>
+        </div>
+
+        <!-- PROOF -->
+        <div class="proof-block">
+          <div class="proof-header"><span class="proof-tag">Preuve réelle</span></div>
+          <p class="proof-text">Vous voyez un thème unique ici ? <strong>Non.</strong> Pourtant elles percent toutes.</p>
+          <p class="proof-text" style="margin-top:8px;">Un t-shirt. Du karting. Un téléphone. De la photographie.</p>
+          <div class="stats-row">
+            <div class="stat-pill"><div class="stat-num">34K</div><div class="stat-label">vues vidéo 1</div></div>
+            <div class="stat-pill"><div class="stat-num">42K</div><div class="stat-label">vues vidéo 2</div></div>
+            <div class="stat-pill"><div class="stat-num">25K</div><div class="stat-label">vues vidéo 3</div></div>
+            <div class="stat-pill"><div class="stat-num">12K</div><div class="stat-label">vues vidéo 4</div></div>
+          </div>
+          <p class="proof-text">Quatre sujets qui n'ont rien à voir entre eux. Quatre vidéos qui ont toutes percé. Sur le même compte. <strong>Avec moins de 1000 followers.</strong></p>
+          <p class="proof-text" style="margin-top:8px;">Ce n'est pas la niche qui a fait ces chiffres. Ce n'est pas le nombre de followers. Ce n'est pas le budget de production. C'est <strong>la vidéo. Juste la vidéo.</strong></p>
+        </div>
+
+        <!-- EXERCISE -->
+        <div class="exercise">
+          <div class="exercise-header">
+            <div class="exercise-icon">⚡</div>
+            <div>
+              <div class="exercise-title">Fais ça maintenant</div>
+              <div class="exercise-subtitle">Exercice Section 1</div>
+            </div>
+          </div>
+          <div class="exercise-body">
+            Ouvre TikTok maintenant. Passe <strong>15 minutes</strong> à regarder ton feed normalement. Mais cette fois — à chaque vidéo que tu regardes jusqu'au bout, pose-toi une question : <strong>pourquoi je suis resté ?</strong> Note tes réponses. À la fin des 15 minutes, tu auras ta première vraie leçon sur ce qui retient l'attention.
+          </div>
+        </div>
+
+        <div class="takeaways">
+          <div class="takeaways-title">Ce que vous devez accepter</div>
+          <div class="takeaway-item"><div class="takeaway-dot"></div><div class="takeaway-text">L'accessibilité de TikTok est réelle — la barrière est dans votre tête, pas dans l'outil</div></div>
+          <div class="takeaway-item"><div class="takeaway-dot"></div><div class="takeaway-text">Le perfectionnisme est de la peur déguisée — publiez d'abord, améliorez ensuite</div></div>
+          <div class="takeaway-item"><div class="takeaway-dot"></div><div class="takeaway-text">L'authenticité n'est pas un conseil vague — c'est le mécanisme concret qui crée l'engagement</div></div>
+          <div class="takeaway-item"><div class="takeaway-dot"></div><div class="takeaway-text">L'algorithme juge la vidéo, pas le compte — chaque publication repart de zéro</div></div>
+          <div class="takeaway-item"><div class="takeaway-dot"></div><div class="takeaway-text">La seule limite sur TikTok c'est le nombre de vidéos que vous décidez de ne pas faire</div></div>
+        </div>
+
+        <div class="mark-done-wrap">
+          <button class="btn-done" onclick="markDone('s1')">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3,8 6,11 13,4"/></svg>
+            Marquer comme terminé
+          </button>
+        </div>
+      </div>
+
+      <!-- ====== SECTION 2 ====== -->
+      <div class="section-panel" id="s2">
+        <div class="section-hero">
+          <div class="section-tag tag-gold">Section 02</div>
+          <h1 class="section-h1">B2B ou B2C ?<br><em>La fausse question.</em></h1>
+          <p class="section-lead">Pourquoi la distinction ne change pas grand chose à ta stratégie de contenu.</p>
+        </div>
+
+        <div class="prose">
+          <p>Chante <strong>"EOOO ! MAFANA A!"</strong> si tu t'es déjà demandé si ton contenu devait s'adresser à des particuliers ou à des professionnels ? On met de côté d'abord les contenus qui s'adressent à ton ex ou à ton ancien patron d'abord, merciiii 🫡</p>
+          <p>Maintenant prend une Limonady si cette question t'a déjà empêché de publier. Ça va te rafraîchir pour la suite aussi.</p>
+
+          <h2>La vérité sur qui regarde TikTok.</h2>
+          <p>La directrice commerciale qui négocie des contrats à 6 chiffres dans la journée — Je te jure qu'elle connaît les Trends…. Ils scrollent comme nous. Pas en mode "big boss". En mode humain. Fatigués. Curieux.</p>
+          <p>Le gérant de PME qui cherche un vidéaste — il l'a trouvé grâce à sa fille qui lui a montré son contenu sur TikTok. Pas toujours sur LinkedIn. Sur TikTok.</p>
+          <p>La frontière B2B / B2C n'existe pas dans le scroll. Elle existe dans les esprits des créateurs qui se posent trop de questions avant de publier.</p>
+
+          <h2>Donc B2B et B2C c'est pareil ?</h2>
+          <p>Pas tout à fait. Et c'est là que la nuance compte.</p>
+          <p>L'humain qui regarde ta vidéo est toujours un humain. Mais cet humain a plusieurs versions de lui-même. Il y a la <strong>version canapé</strong> — détendue, émotionnelle, qui réagit à l'instinct. Et il y a la <strong>version bureau</strong> — rationnelle, qui justifie ses décisions, qui pense money money money…. We don't need your money, money, money. NO ! we need your money, what was Jessie J singing about.</p>
+          <p>Anyway, ta vidéo doit d'abord toucher la version canapé. C'est elle qui arrête le scroll. C'est elle qui regarde jusqu'au bout. C'est elle qui suit.</p>
+        </div>
+
+        <h2 style="font-family:'Playfair Display',serif;font-size:1.35rem;font-weight:700;margin:32px 0 16px;color:var(--dark);">TOFU. MOFU. BOFU.</h2>
+        <p style="font-size:0.88rem;color:var(--grey);margin-bottom:20px;">Trois mots qui vont changer la façon dont tu penses chaque vidéo que tu publies. Imagine un cornet. Large en haut, <em>kelikely</em> en bas.</p>
+
+        <div class="funnel-viz">
+          <div class="funnel-layer funnel-tofu">
+            <div>
+              <div class="funnel-label">TOFU</div>
+              <div class="funnel-pct">80% de ton contenu</div>
+            </div>
+            <div class="funnel-desc">Exister dans le feed. Provoquer une émotion. Pas de pitch.</div>
+          </div>
+          <div class="funnel-layer funnel-mofu">
+            <div>
+              <div class="funnel-label">MOFU</div>
+              <div class="funnel-pct">Crédibilité</div>
+            </div>
+            <div class="funnel-desc">Montrer que tu maîtrises. Réveiller la version bureau.</div>
+          </div>
+          <div class="funnel-layer funnel-bofu">
+            <div>
+              <div class="funnel-label">BOFU</div>
+              <div class="funnel-pct">Action</div>
+            </div>
+            <div class="funnel-desc">CTA clair. Offre. Témoignage.</div>
+          </div>
+        </div>
+
+        <div class="prose">
+          <p>Pour une audience <strong>B2C</strong> — le chemin de TOFU à BOFU peut être très court. Une seule vidéo peut suffire à déclencher un achat. L'émotion prime, la décision est rapide.</p>
+          <p>Pour une audience <strong>B2B</strong> — le MOFU est crucial. Ce sont les vidéos de MOFU qui réveillent la version bureau. Un résultat client glissé naturellement. Un process montré sans tout expliquer. Le professionnel qui te regardait en mode canapé vient de passer en mode "je note ce contact."</p>
+          <p>La preuve de compétence la plus efficace est celle qui se glisse naturellement dans le contenu, pas celle qu'on annonce directement. C'est qui déjà la marque de transport/covoiturage qu'on voyait en pub partout sur les réseaux ? 👀 Commence leo pub matraquage ohatran'ireny zah io….</p>
+        </div>
+
+        <!-- PROOF -->
+        <div class="proof-block">
+          <div class="proof-header"><span class="proof-tag">Preuves clients réelles</span></div>
+          <p class="proof-text"><strong>B2B</strong> — Entreprise de service informatique. Contenu TOFU :</p>
+          <a class="proof-link" href="https://www.tiktok.com/@altradisssarl/video/7546654774364589368" target="_blank">↗ Voir la vidéo @altradisssarl</a>
+          <p class="proof-text" style="margin-top:16px;"><strong>B2C</strong> — Service de streaming Gasy. Contenu TOFU :</p>
+          <a class="proof-link" href="https://www.tiktok.com/@sehatra.com/video/7621811395029470485" target="_blank">↗ Voir la vidéo @sehatra.com</a>
+        </div>
+
+        <!-- EXERCISE -->
+        <div class="exercise">
+          <div class="exercise-header">
+            <div class="exercise-icon">⚡</div>
+            <div>
+              <div class="exercise-title">Fais ça maintenant</div>
+              <div class="exercise-subtitle">Exercice Section 2</div>
+            </div>
+          </div>
+          <div class="exercise-body">
+            Écris en une phrase qui est ton client idéal. Pas sa catégorie — <strong>lui</strong>. Son problème précis. Ce qu'il ressent quand il cherche ce que tu offres. Et quel type de vidéo peut te mettre en avant pour que ce client idéal collabore avec toi.
+          </div>
+        </div>
+
+        <div class="takeaways">
+          <div class="takeaways-title">Ce que tu dois retenir</div>
+          <div class="takeaway-item"><div class="takeaway-dot"></div><div class="takeaway-text">Sur TikTok tout le monde est humain d'abord — ciblez l'humain, pas le rôle</div></div>
+          <div class="takeaway-item"><div class="takeaway-dot"></div><div class="takeaway-text">TOFU / MOFU / BOFU : pense chaque vidéo en fonction de là où elle se situe dans le cornet</div></div>
+          <div class="takeaway-item"><div class="takeaway-dot"></div><div class="takeaway-text">Pour le B2C : le chemin vers l'achat est court — l'émotion déclenche vite</div></div>
+          <div class="takeaway-item"><div class="takeaway-dot"></div><div class="takeaway-text">Pour le B2B : soigne ton MOFU — c'est lui qui réveille la version bureau</div></div>
+        </div>
+
+        <div class="mark-done-wrap">
+          <button class="btn-done" onclick="markDone('s2')">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3,8 6,11 13,4"/></svg>
+            Marquer comme terminé
+          </button>
+        </div>
+      </div>
+
+      <!-- ====== SECTION 3.1 ====== -->
+      <div class="section-panel" id="s31">
+        <div class="section-hero">
+          <div class="section-tag tag-teal">Blueprint 3.1</div>
+          <h1 class="section-h1">La niche ne fait pas<br>le créateur. <em>C'est l'inverse.</em></h1>
+        </div>
+        <div class="prose">
+          <p>Bio compte TikTok be like….</p>
+          <p>Plus sérieusement, c'est quoi la <strong>Niche</strong> ?</p>
+        </div>
+        <div class="highlight-gold">
+          <p><strong>Secteur d'activité</strong> = Boutique de téléphone<br><strong>Niche</strong> = Boutique tech spécialisée dans la vente d'iPhone et produits Apple</p>
+        </div>
+        <div class="prose">
+          <p>La Niche c'est ta spécialisation dans un domaine. Tout le monde est coach fitness mais toi t'es coach fitness qui aident les femmes à développer le bas du corps sans BBL.</p>
+          <p><strong>NB : la niche n'est pas un point de départ. C'est un point d'arrivée.</strong></p>
+          <p>Les plus grands créateurs sur TikTok n'ont pas commencé avec une niche définie. Ils ont commencé avec une envie de partager quelque chose — n'importe quoi — et c'est leur façon unique de le faire qui a créé leur niche avec le temps. Leur style. Leur ton. Leur regard sur les choses. C'est ça qui fidélise une audience — pas un thème fixe.</p>
+          <p>Pose-toi cette question : est-ce que tu suis un créateur pour ce dont il parle — ou pour <strong>comment il en parle</strong> ?</p>
+          <p>La réponse est presque toujours : pour comment il en parle. <strong>C'est lui la niche. Pas le sujet.</strong></p>
+        </div>
+        <div class="exercise">
+          <div class="exercise-header">
+            <div class="exercise-icon">⚡</div>
+            <div><div class="exercise-title">Fais ça maintenant</div><div class="exercise-subtitle">Exercice 3.1</div></div>
+          </div>
+          <div class="exercise-body">Ouvre les notes de ton téléphone. Écris <strong>10 sujets</strong> sur lesquels tu pourrais parler pendant 60 secondes sans préparer. N'importe quoi — ta vie, ton travail, une opinion, une anecdote. Relis la liste. Tu viens de trouver ta matière première. Pas ta niche — ta matière première. La niche viendra d'elle-même.</div>
+        </div>
+        <div class="takeaways">
+          <div class="takeaways-title">Ce que tu dois retenir</div>
+          <div class="takeaway-item"><div class="takeaway-dot"></div><div class="takeaway-text">Ce n'est pas grave si tu ne maîtrises pas bien ta niche avant de publier. Publie d'abord.</div></div>
+          <div class="takeaway-item"><div class="takeaway-dot"></div><div class="takeaway-text">La niche se révèle dans l'action, pas dans la réflexion.</div></div>
+          <div class="takeaway-item"><div class="takeaway-dot"></div><div class="takeaway-text">La Niche c'est ta spécialisation dans un domaine.</div></div>
+        </div>
+        <div class="mark-done-wrap"><button class="btn-done" onclick="markDone('s31')"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3,8 6,11 13,4"/></svg>Marquer comme terminé</button></div>
+      </div>
+
+      <!-- ====== SECTION 3.2 ====== -->
+      <div class="section-panel" id="s32">
+        <div class="section-hero">
+          <div class="section-tag tag-teal">Blueprint 3.2</div>
+          <h1 class="section-h1">Vertical ou horizontal.<br><em>Ça change quoi vraiment ?</em></h1>
+        </div>
+        <div class="prose">
+          <p>Avant de répondre — déjà, c'est quoi la différence ?</p>
+          <p><strong>La composition de l'image.</strong> En horizontal tu as plus de flexibilité au tournage et sur la créativité de la composition. Mais sur TikTok, c'est petit à voir. En vertical, tu prends tout l'écran du téléphone de ton audience. Mais tu deviens sélectif au tournage.</p>
+          <p><strong>Vertical ou horizontal,</strong> ce n'est pas le format qui définit ton succès.</p>
+          <p>Un contenu vertical mal exécuté par quelqu'un qui s'ennuie à publier toujours la même chose — ça se voit. L'audience le sent. L'engagement chute.</p>
+          <p>Un contenu horizontal bien exécuté par quelqu'un qui a un point de vue fort sur tout ce qu'il touche — ça crée une addiction.</p>
+          <p>La vraie question n'est pas vertical ou horizontal. C'est : est-ce que tu as quelque chose à dire sur ce sujet — ou tu publies parce que <em>"c'est dans ta niche"</em> ?</p>
+        </div>
+        <div class="highlight-quote">
+          <p>L'algorithme TikTok s'en fout du format de ta vidéo. Est-ce qu'elle retient l'attention ? Est-ce qu'elle provoque une réaction ? Si oui — elle est distribuée.</p>
+        </div>
+        <div class="exercise">
+          <div class="exercise-header">
+            <div class="exercise-icon">⚡</div>
+            <div><div class="exercise-title">Fais ça maintenant</div><div class="exercise-subtitle">Exercice 3.2</div></div>
+          </div>
+          <div class="exercise-body">Ouvre TikTok. Cherche un créateur que tu admires. Regarde ses <strong>5 dernières vidéos</strong>. Note : est-ce qu'il est vertical ou horizontal ? Est-ce que ça a changé quelque chose à ton envie de regarder ? La réponse que tu vas trouver toi-même vaut mieux que n'importe quelle règle.</div>
+        </div>
+        <div class="takeaways">
+          <div class="takeaways-title">Ce que tu dois retenir</div>
+          <div class="takeaway-item"><div class="takeaway-dot"></div><div class="takeaway-text">Vertical ou horizontal — les deux fonctionnent si tu as un point de vue</div></div>
+          <div class="takeaway-item"><div class="takeaway-dot"></div><div class="takeaway-text">Ce qui tue un compte ce n'est pas l'incohérence thématique — c'est l'incohérence de ton</div></div>
+          <div class="takeaway-item"><div class="takeaway-dot"></div><div class="takeaway-text">L'algorithme juge la vidéo — pas le catalogue</div></div>
+        </div>
+        <div class="mark-done-wrap"><button class="btn-done" onclick="markDone('s32')"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3,8 6,11 13,4"/></svg>Marquer comme terminé</button></div>
+      </div>
+
+      <!-- ====== SECTION 3.3 ====== -->
+      <div class="section-panel" id="s33">
+        <div class="section-hero">
+          <div class="section-tag tag-teal">Blueprint 3.3</div>
+          <h1 class="section-h1">Authenticité<br><em>> Perfection</em></h1>
+        </div>
+        <div class="prose">
+          <p>Combien de vidéos tu as tournées et jamais publiées ?</p>
+          <p>Il y a une vidéo quelque part dans ton téléphone. Bien tournée. Bien pensée. Jamais publiée parce que <em>"la lumière n'était pas top"</em> ou <em>"j'aurais pu mieux dire cette phrase"</em> ou <em>"je vais la refaire demain."</em></p>
+          <p>Demain qui n'est jamais venu.</p>
+          <p>Pendant ce temps — quelqu'un a publié une vidéo floue, dans sa voiture, avec le bruit de la rue en fond. Et elle a fait 80 000 vues.</p>
+          <p>Parce que les gens ne regardent pas tes vidéos pour juger ta production. Ils regardent pour ressentir quelque chose. Pour apprendre quelque chose. Pour se reconnaître dans quelque chose.</p>
+          <p>La perfection technique crée de la distance. L'authenticité crée de la proximité. Laisse la perfection au cinéma. J'ai bien dit cinéma et non tele-novegasy 🙃.</p>
+          <p>Une vidéo parfaite dit <em>"regarde comme je suis professionnel."</em> Une vidéo authentique dit <em>"je te parle à toi."</em> Et sur TikTok — c'est toujours la deuxième qui gagne.</p>
+        </div>
+        <div class="highlight-gold">
+          <p>Ça ne veut pas dire publier n'importe quoi. Ça veut dire ne pas laisser la recherche du parfait tuer le bien. <strong>Une bonne idée mal filmée bat une mauvaise idée bien produite à chaque fois.</strong></p>
+        </div>
+        <div class="prose">
+          <h2>Mais c'est quoi exactement, l'authenticité ?</h2>
+          <p>C'est le mot le plus utilisé et le moins défini de toute la création de contenu.</p>
+          <p>Réponds juste à cette question : <em>Pourquoi tu aimes la galette ?</em></p>
+          <p>L'authenticité ce n'est pas filmer sans lumière et parler sans préparation en espérant que ça passe pour du "vrai." Ce n'est pas non plus raconter tous les détails de ta vie privée pour paraître proche de ton audience.</p>
+          <p><strong>L'authenticité c'est l'alignement entre ce que tu penses, ce que tu dis, et comment tu le dis.</strong></p>
+        </div>
+        <div class="auth-checks">
+          <div class="auth-check">
+            <div class="auth-check-icon">💬</div>
+            <div>
+              <div class="auth-check-q">Est-ce que tu dirais ça à quelqu'un en face de toi ?</div>
+              <div class="auth-check-a">Si la réponse est non — c'est du contenu fabriqué, pas du contenu authentique.</div>
+            </div>
+          </div>
+          <div class="auth-check">
+            <div class="auth-check-icon">🧠</div>
+            <div>
+              <div class="auth-check-q">Est-ce que tu le penses vraiment ?</div>
+              <div class="auth-check-a">Une opinion empruntée à quelqu'un d'autre pour paraître crédible — ça se voit toujours.</div>
+            </div>
+          </div>
+          <div class="auth-check">
+            <div class="auth-check-icon">🪞</div>
+            <div>
+              <div class="auth-check-q">Est-ce que tu es reconnaissable ?</div>
+              <div class="auth-check-a">Ton ton. Tantine haha. Ta façon de structurer les choses. C'est ça qui crée l'attachement.</div>
+            </div>
+          </div>
+        </div>
+        <div class="takeaways">
+          <div class="takeaways-title">Ce que tu dois retenir</div>
+          <div class="takeaway-item"><div class="takeaway-dot"></div><div class="takeaway-text">La perfection technique est un bonus — jamais un prérequis</div></div>
+          <div class="takeaway-item"><div class="takeaway-dot"></div><div class="takeaway-text">L'authenticité n'est pas un manque de professionnalisme — c'est une stratégie</div></div>
+          <div class="takeaway-item"><div class="takeaway-dot"></div><div class="takeaway-text">Ton audience veut se reconnaître dans ce que tu publies — pas être impressionnée</div></div>
+          <div class="takeaway-item"><div class="takeaway-dot"></div><div class="takeaway-text">La vidéo publiée imparfaite vaut infiniment plus que la vidéo parfaite qui dort dans ton téléphone</div></div>
+        </div>
+        <div class="mark-done-wrap"><button class="btn-done" onclick="markDone('s33')"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3,8 6,11 13,4"/></svg>Marquer comme terminé</button></div>
+      </div>
+
+      <!-- ====== SECTION 3.4 ====== -->
+      <div class="section-panel" id="s34">
+        <div class="section-hero">
+          <div class="section-tag tag-teal">Blueprint 3.4</div>
+          <h1 class="section-h1">L'<em>identifiabilité</em></h1>
+          <p class="section-lead">Le mécanisme le plus puissant qui existe sur TikTok.</p>
+        </div>
+        <div class="prose">
+          <p>Il y a un mot que ton audience ne dira jamais — mais qu'elle ressentira à chaque fois qu'elle regardera une de tes vidéos.</p>
+        </div>
+        <div class="highlight-quote">
+          <p style="font-size:1.3rem;font-family:'Playfair Display',serif;font-style:italic;">"C'est moi."</p>
+          <p style="margin-top:8px;">Pas "c'est bien." Pas "c'est intéressant." Pas "c'est professionnel."<br><strong>"C'est moi."</strong></p>
+        </div>
+        <div class="prose">
+          <p>Ce moment précis où quelqu'un regarde ton contenu et se reconnaît dedans — dans ce que tu décris, ce que tu ressens, ce que tu vis — c'est l'identifiabilité.</p>
+          <h2>Pourquoi c'est plus fort que la qualité ?</h2>
+          <p>La qualité impressionne. L'identifiabilité <strong>attache</strong>.</p>
+          <p>Un spectateur impressionné like et passe à autre chose. Un spectateur qui se reconnaît — il commente, il partage, il revient. Il envoie la vidéo à son ami en disant <em>"c'est tellement toi ça."</em> Il te suit parce qu'il a l'impression que tu le comprends mieux que les gens autour de lui.</p>
+          <p>C'est ça la vraie viralité. Pas les vues. <strong>Le sentiment partagé.</strong></p>
+          <h2>Les trois formes d'identifiabilité sur TikTok</h2>
+        </div>
+        <div class="id-cards">
+          <div class="id-card">
+            <div class="id-card-icon">📍</div>
+            <div class="id-card-title">La Situation</div>
+            <div class="id-card-desc">L'odeur qui vient avec le misisika 194 a Ampasapito. La conversation avec un client qui ne sait pas ce qu'il veut.</div>
+          </div>
+          <div class="id-card">
+            <div class="id-card-icon">💭</div>
+            <div class="id-card-title">L'Émotion</div>
+            <div class="id-card-desc">La peur de commencer. La jalousie déguisée en "je suis content pour toi." Le syndrome de l'imposteur.</div>
+          </div>
+          <div class="id-card">
+            <div class="id-card-icon">🌟</div>
+            <div class="id-card-title">L'Aspiration</div>
+            <div class="id-card-desc">Juste un cran au-dessus. Assez proche pour qu'ils se disent "ça pourrait être moi."</div>
+          </div>
+        </div>
+        <div class="exercise">
+          <div class="exercise-header">
+            <div class="exercise-icon">⚡</div>
+            <div><div class="exercise-title">Fais ça maintenant</div><div class="exercise-subtitle">Exercice 3.4</div></div>
+          </div>
+          <div class="exercise-body">Pense à la dernière fois où tu as regardé une vidéo et tu t'es dit <strong>"c'est exactement moi ça."</strong> C'était quoi ? Qu'est-ce qui t'a fait te reconnaître — la situation, l'émotion, ou l'aspiration ? Maintenant retourne la question : dans ta prochaine vidéo, lequel de ces trois éléments tu peux utiliser ?</div>
+        </div>
+        <div class="takeaways">
+          <div class="takeaways-title">Ce que tu dois retenir</div>
+          <div class="takeaway-item"><div class="takeaway-dot"></div><div class="takeaway-text">L'identifiabilité c'est le moment où ton audience dit "c'est moi" en regardant ta vidéo</div></div>
+          <div class="takeaway-item"><div class="takeaway-dot"></div><div class="takeaway-text">La qualité impressionne — l'identifiabilité attache</div></div>
+          <div class="takeaway-item"><div class="takeaway-dot"></div><div class="takeaway-text">Pense ton contenu comme un miroir — tu décris ce que ton audience vit et n'arrive pas à formuler</div></div>
+          <div class="takeaway-item"><div class="takeaway-dot"></div><div class="takeaway-text">Les trois formes : la situation, l'émotion, l'aspiration</div></div>
+        </div>
+        <div class="mark-done-wrap"><button class="btn-done" onclick="markDone('s34')"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3,8 6,11 13,4"/></svg>Marquer comme terminé</button></div>
+      </div>
+
+      <!-- ====== SECTION 3.5 ====== -->
+      <div class="section-panel" id="s35">
+        <div class="section-hero">
+          <div class="section-tag tag-teal">Blueprint 3.5</div>
+          <h1 class="section-h1">Les <em>ventes indirectes</em></h1>
+        </div>
+        <div class="prose">
+          <p>Personne n'aime se faire vendre quelque chose. Les contenus trop commerciaux sont bannis de TikTok.</p>
+          <p>Mais tout le monde aime acheter. <em>Vola misy foana na 35 janvier aza.</em></p>
+          <p>La différence entre les deux — c'est qui prend l'initiative. Quand c'est toi qui pousses — c'est de la vente. Quand c'est ton audience qui vient — c'est de l'achat.</p>
+          <h2>Comment on vend sans vendre ?</h2>
+          <p>Tu ne dis jamais "achetez mon produit." Tu ne fais pas de CTA agressif toutes les deux secondes. Tu achètes régulièrement chez celui qui crie tout le temps KOBA OOOOOOH partout ? Ou tu achètes surtout quand tu vas à Imerintsiatosika car tu ressens quelque chose de spécial qui te pousse "naturellement" là-bas.</p>
+          <p>Comment tu fais donc ? Tu <strong>montres. Tu racontes. Tu prouves.</strong></p>
+          <p>Un résultat client mentionné en passant dans une vidéo sur autre chose. Un process de travail filmé sans tout expliquer. Un avant/après sans discours. Une réaction client réelle.</p>
+          <p>Le spectateur regarde. Il comprend ce que tu vaux. Il fait le calcul lui-même. Et il vient te chercher.</p>
+        </div>
+        <div class="highlight-quote">
+          <p>C'est ça la vente indirecte — tu crées la <strong>preuve</strong>, pas l'argument.</p>
+        </div>
+        <div class="prose">
+          <h2>Pourquoi c'est plus efficace qu'un pitch direct ?</h2>
+          <p>Parce que la confiance ne se déclare pas. Elle se démontre.</p>
+          <p>Quelqu'un qui te dit <em>"je suis le meilleur" "zah no tena grand"</em> — tu doutes. Quelqu'un qui te montre ses résultats sans rien dire — tu crois.</p>
+          <p><strong>La preuve silencieuse est toujours plus convaincante que l'argument bruyant.</strong></p>
+          <h2>La règle des 80/20 appliquée à TikTok</h2>
+        </div>
+        <div class="pie-visual">
+          <div class="pie-chart"></div>
+          <div class="pie-legend">
+            <div class="pie-legend-item">
+              <div class="pie-dot" style="background:var(--teal)"></div>
+              <div class="pie-legend-text"><strong>80%</strong> — Donner <span>valeur, divertissement, identifiabilité</span></div>
+            </div>
+            <div class="pie-legend-item">
+              <div class="pie-dot" style="background:var(--red)"></div>
+              <div class="pie-legend-text"><strong>20%</strong> — Montrer <span>résultats, process, ce que tu peux apporter</span></div>
+            </div>
+          </div>
+        </div>
+        <div class="prose">
+          <p>Ce ratio crée quelque chose de précieux : la légitimité. Quand tu as donné suffisamment, le jour où tu montres ce que tu fais — personne ne te reproche de le faire.</p>
+        </div>
+        <div class="exercise">
+          <div class="exercise-header">
+            <div class="exercise-icon">⚡</div>
+            <div><div class="exercise-title">Fais ça maintenant</div><div class="exercise-subtitle">Exercice 3.5</div></div>
+          </div>
+          <div class="exercise-body">Regarde tes <strong>3 dernières vidéos</strong> publiées — ou celles d'un créateur que tu suis. Compte combien de fois il y a un CTA direct. Maintenant compte combien de fois la valeur est montrée sans être annoncée. Le ratio que tu trouves — c'est ton diagnostic 80/20 personnel.</div>
+        </div>
+        <div class="takeaways">
+          <div class="takeaways-title">Ce que tu dois retenir</div>
+          <div class="takeaway-item"><div class="takeaway-dot"></div><div class="takeaway-text">Personne n'aime se faire vendre — tout le monde aime acheter</div></div>
+          <div class="takeaway-item"><div class="takeaway-dot"></div><div class="takeaway-text">Tu crées la preuve, pas l'argument</div></div>
+          <div class="takeaway-item"><div class="takeaway-dot"></div><div class="takeaway-text">La confiance se démontre — elle ne se déclare pas</div></div>
+          <div class="takeaway-item"><div class="takeaway-dot"></div><div class="takeaway-text">80% donner / 20% montrer — ce ratio construit ta légitimité dans le temps</div></div>
+        </div>
+        <div class="mark-done-wrap"><button class="btn-done" onclick="markDone('s35')"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3,8 6,11 13,4"/></svg>Marquer comme terminé</button></div>
+      </div>
+
+      <!-- ====== SECTION 3.6 ====== -->
+      <div class="section-panel" id="s36">
+        <div class="section-hero">
+          <div class="section-tag tag-teal">Blueprint 3.6</div>
+          <h1 class="section-h1">Le storytelling,<br><em>c'est pas pour les écrivains</em></h1>
+        </div>
+        <div class="prose">
+          <p>Quand tu entends "storytelling" — tu penses peut-être à un film. Un roman. Une grande narration épique.</p>
+          <p><em>Diso tompoko,</em></p>
+          <p>Sur TikTok, le storytelling c'est juste une façon de structurer ce que tu as à dire pour que les gens restent jusqu'à la fin. Juste une logique simple qui capte l'attention, crée de la tension, et délivre quelque chose qui vaut le temps passé.</p>
+          <h2>Pourquoi le storytelling vend mieux qu'un argumentaire ?</h2>
+          <p>Les chiffres convainquent. Les histoires <strong>font agir</strong>.</p>
+          <p>Parce que le cerveau humain ne traite pas les informations et les histoires de la même façon. Une information entre par la raison. Une histoire entre par l'émotion. Et c'est l'émotion qui déclenche l'action.</p>
+          <h2>La structure de base d'une vidéo TikTok qui retient</h2>
+        </div>
+        <div class="story-blocks">
+          <div class="story-block story-hook">
+            <div class="story-block-num">01</div>
+            <div class="story-block-title">Le Hook</div>
+            <div class="story-block-desc">Les 3 premières secondes. Question qui dérange, affirmation qui surprend, situation qui intrigue. <strong>Pas de "bonjour je suis."</strong> Directement dans le vif.<br><br><em>3 secondes c'est long. Eny eh, mety vetivety ho anazy zany, mais je t'assure que c'est long.</em></div>
+          </div>
+          <div class="story-block story-tension">
+            <div class="story-block-num">02</div>
+            <div class="story-block-title">La Tension</div>
+            <div class="story-block-desc">C'est la partie que tu ne comprends pas toi-même. Le cerveau humain ne supporte pas une question sans réponse — la "boucle ouverte." <strong>Retarde la réponse. Empile les questions. Montre avant d'expliquer.</strong></div>
+          </div>
+          <div class="story-block story-resolution">
+            <div class="story-block-num">03</div>
+            <div class="story-block-title">La Résolution</div>
+            <div class="story-block-desc">Tu délivres. La réponse. La solution. La chute. C'est ici que la valeur est perçue — et c'est souvent ici que la vente se fait, indirectement ou non.</div>
+          </div>
+        </div>
+        <div class="highlight-quote">
+          <p>L'erreur classique : aller trop vite vers la résolution parce qu'on a peur d'ennuyer. <strong>La tension c'est le carburant de l'attention. Sans elle, ta vidéo est une information. Avec elle, c'est une expérience.</strong></p>
+        </div>
+        <div class="prose">
+          <h2>Le storytelling dans la vente indirecte</h2>
+          <p>Tu ne dis pas <em>"j'ai aidé un client à doubler son chiffre d'affaires."</em></p>
+          <p>Tu racontes : <em>"Un client m'a contacté en mars. Il postait depuis 6 mois, zéro résultat. On a changé une seule chose dans sa façon de structurer ses vidéos. Le mois suivant — sa première vidéo à 20 000 vues. Derrière : 3 nouveaux clients."</em></p>
+          <p>Même information. Mais la deuxième version — tu la lis jusqu'au bout. Et tu te demandes c'est quoi la chose qu'on a changée.</p>
+          <p>C'est ça le storytelling appliqué à TikTok. <strong>Galety eh ! Galety mihaja 🤣</strong></p>
+        </div>
+        <div class="exercise">
+          <div class="exercise-header">
+            <div class="exercise-icon">⚡</div>
+            <div><div class="exercise-title">Fais ça maintenant</div><div class="exercise-subtitle">Exercice 3.6</div></div>
+          </div>
+          <div class="exercise-body">Prends une idée de vidéo que tu as dans la tête. Écris-la en 3 lignes :<br><br><strong>Ligne 1</strong> — ton hook. La première phrase que tu vas dire.<br><strong>Ligne 2</strong> — ta tension. La question que tu laisses ouverte.<br><strong>Ligne 3</strong> — ta résolution. Ce que tu délivres à la fin.<br><br>Si tu n'arrives pas à remplir les 3 lignes — l'idée n'est pas encore prête. Si tu les remplis en moins de 2 minutes — <strong>tourne la vidéo aujourd'hui.</strong></div>
+        </div>
+        <div class="takeaways">
+          <div class="takeaways-title">Ce que tu dois retenir</div>
+          <div class="takeaway-item"><div class="takeaway-dot"></div><div class="takeaway-text">Le storytelling ce n'est pas de la littérature — c'est une structure pour retenir l'attention</div></div>
+          <div class="takeaway-item"><div class="takeaway-dot"></div><div class="takeaway-text">Les chiffres convainquent — les histoires font agir</div></div>
+          <div class="takeaway-item"><div class="takeaway-dot"></div><div class="takeaway-text">Hook / Tension / Résolution — la base de toute vidéo qui retient jusqu'au bout</div></div>
+          <div class="takeaway-item"><div class="takeaway-dot"></div><div class="takeaway-text">La tension est ce qui empêche de scroller — ne donne jamais la réponse trop tôt</div></div>
+        </div>
+        <div class="mark-done-wrap"><button class="btn-done" onclick="markDone('s36')"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3,8 6,11 13,4"/></svg>Marquer comme terminé</button></div>
+      </div>
+
+      <!-- ====== SECTION 3.7 ====== -->
+      <div class="section-panel" id="s37">
+        <div class="section-hero">
+          <div class="section-tag tag-teal">Blueprint 3.7</div>
+          <h1 class="section-h1">L'algorithme priorise<br>la <em>vidéo</em>, pas le compte.</h1>
+        </div>
+        <div class="prose">
+          <p><strong>Viloma Facebook sy Instagram !</strong></p>
+          <p>Sur Facebook — ta page a une audience. Tu publies, ton audience voit. Sur Instagram — tes followers déterminent ta portée de base. Plus tu en as, plus tu existes.</p>
+          <p>Sur TikTok — tes followers ne regardent pas forcément tes vidéos. Et quelqu'un qui ne te connaît pas peut voir ta vidéo demain matin.</p>
+          <p>C'est un système fondamentalement différent. Et si tu ne comprends pas ça, tu vas passer des mois à optimiser les mauvaises choses.</p>
+          <h2>Comment fonctionne l'algorithme TikTok ?</h2>
+          <p>Quand tu publies une vidéo, TikTok la montre d'abord à un petit groupe test. Ce groupe test regarde. Et l'algorithme observe trois choses :</p>
+        </div>
+        <div class="algo-viz">
+          <div class="algo-circle algo-c1">
+            <div class="algo-num">✓%</div>
+            <div class="algo-label">Complétion</div>
+          </div>
+          <div class="algo-circle algo-c2">
+            <div class="algo-num">❤️</div>
+            <div class="algo-label">Interactions</div>
+          </div>
+          <div class="algo-circle algo-c3">
+            <div class="algo-num">🔁</div>
+            <div class="algo-label">Re-watch</div>
+          </div>
+        </div>
+        <div class="prose">
+          <p>Si les signaux sont bons — TikTok élargit. Un deuxième groupe. Puis un troisième. C'est comme ça qu'une vidéo passe de 500 vues à 50 000 en 48 heures.</p>
+          <p><strong>À Madagascar,</strong> du contenu ciblé pour les Malagasy est déjà considéré comme viral dès 10k vues. Sur 30 Millions d'habitants, combien utilisent TikTok ? Rien qu'à Tana on est 4.4 millions avec un taux de pauvreté de 80%. Ça veut dire que seulement 900k peuvent se permettre TikTok. Et ces derniers ont des intérêts différents donc ils ne verront pas tous tes vidéos. Il y a toujours quelques exceptions. C'est qui a réussi plus de 500k de vues 3 fois ? C'est <strong>KIALA NGITAAAA</strong></p>
+          <h2>Ce que ça change pour toi concrètement</h2>
+          <p>Tu peux avoir 200 followers et faire 30 000 vues. Parce que l'algorithme ne regarde pas ton compteur de followers — il regarde les <strong>signaux de ta vidéo.</strong></p>
+          <p>Tu peux avoir publié 50 vidéos sans résultats — et la 51ème peut tout changer. Parce que chaque vidéo repart de zéro dans le système de distribution.</p>
+        </div>
+        <div class="highlight-quote">
+          <p>L'algorithme amplifie — il ne crée pas. Il prend ce qui fonctionne et le montre à plus de monde. <strong>L'algorithme est un accélérateur. Pas un sauveur.</strong></p>
+        </div>
+        <div class="exercise">
+          <div class="exercise-header">
+            <div class="exercise-icon">⚡</div>
+            <div><div class="exercise-title">Fais ça maintenant</div><div class="exercise-subtitle">Exercice 3.7</div></div>
+          </div>
+          <div class="exercise-body">Ouvre ton compte TikTok. Va dans tes analytics. Trouve ta vidéo avec le <strong>meilleur taux de complétion</strong>. Maintenant trouve celle avec le <strong>plus de followers générés</strong>. Est-ce que c'est la même vidéo ? Souvent non. Ce décalage — c'est l'algorithme qui te parle.</div>
+        </div>
+        <div class="takeaways">
+          <div class="takeaways-title">Ce que tu dois retenir</div>
+          <div class="takeaway-item"><div class="takeaway-dot"></div><div class="takeaway-text">TikTok distribue chaque vidéo individuellement — tes followers ne déterminent pas ta portée</div></div>
+          <div class="takeaway-item"><div class="takeaway-dot"></div><div class="takeaway-text">Les 3 signaux clés : taux de complétion, interactions, re-watch</div></div>
+          <div class="takeaway-item"><div class="takeaway-dot"></div><div class="takeaway-text">Chaque vidéo repart de zéro — pas de dette, pas de pénalité</div></div>
+          <div class="takeaway-item"><div class="takeaway-dot"></div><div class="takeaway-text">L'algorithme amplifie ce qui fonctionne — il ne rattrape pas ce qui ne retient pas</div></div>
+        </div>
+        <div class="mark-done-wrap"><button class="btn-done" onclick="markDone('s37')"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3,8 6,11 13,4"/></svg>Marquer comme terminé</button></div>
+      </div>
+
+      <!-- ====== SECTION 4 ====== -->
+      <div class="section-panel" id="s4">
+        <div class="section-hero">
+          <div class="section-tag tag-gold">Section 04</div>
+          <h1 class="section-h1">Le <em>Gear</em></h1>
+          <p class="section-lead">Ce dont tu as vraiment besoin. Rien de plus.</p>
+        </div>
+        <div class="prose">
+          <p><em>Tsisy miainga amin'ny tsy misy io fa mila mi'investe iany.</em> Je t'explique tout.</p>
+          <p>Non, tu n'as pas besoin d'une caméra professionnelle. Non, tu n'as pas besoin d'un studio. Mais tu as besoin d'un bon point de départ.</p>
+        </div>
+        <div class="gear-list">
+          <div class="gear-item">
+            <div class="gear-num">1</div>
+            <div class="gear-info">
+              <div class="gear-name">📱 Téléphone</div>
+              <div class="gear-desc">iPhone 13 minimum. Le 13 — stabilisation, lumière faible, mode cinematic. C'est un saut significatif. Android : Google Pixel ou Samsung série S. <em>Tena tsy clé ilay Itel fa mifona 😭</em></div>
+            </div>
+            <div class="gear-badge">Essentiel</div>
+          </div>
+          <div class="gear-item">
+            <div class="gear-num">2</div>
+            <div class="gear-info">
+              <div class="gear-name">🎙️ Micro sans fil</div>
+              <div class="gear-desc">L'audio mauvais tue une bonne vidéo. Place-le sur le col de ton vêtement. Secret d'état : <strong>podcast.adobe.com/en/enhance</strong> pour améliorer ta voix en 1 clic gratuitement.</div>
+            </div>
+            <div class="gear-badge">Non négociable</div>
+          </div>
+          <div class="gear-item">
+            <div class="gear-num">3</div>
+            <div class="gear-info">
+              <div class="gear-name">💡 Lumière</div>
+              <div class="gear-desc">Commence par la lumière naturelle — gratuite, flatteuse, cinématographique. Tes yeux voient mieux que ton téléphone, donc ton téléphone a besoin de plus de lumière que ce que tes yeux voient.</div>
+            </div>
+            <div class="gear-badge">Naturelle d'abord</div>
+          </div>
+          <div class="gear-item">
+            <div class="gear-num">4</div>
+            <div class="gear-info">
+              <div class="gear-name">🎬 Trépied</div>
+              <div class="gear-desc">Pas de débat. Une vidéo qui bouge fatigue l'œil et réduit le taux de complétion. Et on sait maintenant ce que ça signifie pour l'algorithme.</div>
+            </div>
+            <div class="gear-badge">Obligatoire</div>
+          </div>
+          <div class="gear-item">
+            <div class="gear-num">5</div>
+            <div class="gear-info">
+              <div class="gear-name">✂️ CapCut</div>
+              <div class="gear-desc">Avec abonnement. Interface simple, effets adaptés TikTok, exportation optimisée. Sinon Adobe Premiere mobile, gratuit mais limité.</div>
+            </div>
+            <div class="gear-badge">Point de départ</div>
+          </div>
+          <div class="gear-item">
+            <div class="gear-num">6</div>
+            <div class="gear-info">
+              <div class="gear-name">💻 iPad / MacBook</div>
+              <div class="gear-desc">Quand l'argent commence à rentrer. L'iPhone supporte mieux les apps de montage et a les meilleurs écrans.</div>
+            </div>
+            <div class="gear-badge">Quand ça vient</div>
+          </div>
+          <div class="gear-item">
+            <div class="gear-num">7</div>
+            <div class="gear-info">
+              <div class="gear-name">🎨 DaVinci Resolve</div>
+              <div class="gear-desc">Gratuit, professionnel, utilisé dans l'industrie. Étalonnage, mixage audio, multi-cam. Mais c'est une courbe d'apprentissage. Pas pour les premiers jours.</div>
+            </div>
+            <div class="gear-badge">Avec l'expérience</div>
+          </div>
+        </div>
+        <div class="highlight-gold">
+          <p><strong>Réglages qui changent tout :</strong> Filme en 4K. Baisse un peu la valeur d'exposition. Active la grille de composition. Bonne audio = bonne vidéo. Si je dévoile tout, ton esprit rafraîchit pas la Limonady d'avant va déjà chauffer 😅</p>
+        </div>
+        <div class="exercise">
+          <div class="exercise-header">
+            <div class="exercise-icon">⚡</div>
+            <div><div class="exercise-title">Fais ça maintenant</div><div class="exercise-subtitle">Exercice Section 4</div></div>
+          </div>
+          <div class="exercise-body">Prends ton téléphone. Ouvre l'application caméra. Active la grille. Règle l'exposition manuellement en appuyant longuement sur l'écran. Baisse légèrement la luminosité. Filme <strong>10 secondes</strong> de n'importe quoi autour de toi. Compare avec une vidéo filmée en automatique. Tu viens de voir la différence que font 3 réglages simples — sans acheter quoi que ce soit.</div>
+        </div>
+        <div class="takeaways">
+          <div class="takeaways-title">Ce que tu dois retenir</div>
+          <div class="takeaway-item"><div class="takeaway-dot"></div><div class="takeaway-text">Le téléphone est ton outil principal — maîtrise-le avant d'investir dans autre chose</div></div>
+          <div class="takeaway-item"><div class="takeaway-dot"></div><div class="takeaway-text">L'audio mauvais tue une bonne vidéo — le micro n'est pas optionnel</div></div>
+          <div class="takeaway-item"><div class="takeaway-dot"></div><div class="takeaway-text">Commence avec la lumière naturelle — investis dans l'artificiel quand elle ne suffit plus</div></div>
+          <div class="takeaway-item"><div class="takeaway-dot"></div><div class="takeaway-text">Le trépied est obligatoire — une image stable c'est un taux de complétion préservé</div></div>
+          <div class="takeaway-item"><div class="takeaway-dot"></div><div class="takeaway-text">Monte simple au départ — évolue avec tes revenus et ton expérience</div></div>
+        </div>
+        <div class="mark-done-wrap"><button class="btn-done" onclick="markDone('s4')"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3,8 6,11 13,4"/></svg>Marquer comme terminé</button></div>
+      </div>
+
+      <!-- ====== SECTION 5 ====== -->
+      <div class="section-panel" id="s5">
+        <div class="section-hero">
+          <div class="section-tag tag-purple">Section 05</div>
+          <h1 class="section-h1">Démarrer sur<br><em>TikTok</em></h1>
+          <p class="section-lead">Tout ce qu'on a vu — c'était la fondation. Maintenant on construit.</p>
+        </div>
+        <div class="prose">
+          <p>Cette section c'est du concret. Du actionnable. Du <strong>"fais exactement ça dans cet ordre."</strong></p>
+          <h2>5.1 — Ton profil. Ta vitrine. La première impression.</h2>
+        </div>
+        <div class="profile-items">
+          <div class="profile-item">
+            <div class="profile-item-icon">🤳</div>
+            <div class="profile-item-title">Photo de profil</div>
+            <div class="profile-item-desc">Un visage. Ton visage. Pas un logo. Photo nette, bien éclairée, bien dans ton personnage.</div>
+          </div>
+          <div class="profile-item">
+            <div class="profile-item-icon">📝</div>
+            <div class="profile-item-title">Nom de compte</div>
+            <div class="profile-item-desc">Simple. Mémorisable. Prononçable. Évite underscores multiples et chiffres aléatoires.</div>
+          </div>
+          <div class="profile-item">
+            <div class="profile-item-icon">💬</div>
+            <div class="profile-item-title">Bio</div>
+            <div class="profile-item-desc">80 caractères. Une seule phrase. "Vidéaste à Tana. Je transforme tes idées en contenu qui vend."</div>
+          </div>
+          <div class="profile-item">
+            <div class="profile-item-icon">🔗</div>
+            <div class="profile-item-title">Le lien</div>
+            <div class="profile-item-desc">Un seul lien. WhatsApp, Instagram, Linktree. Pas de lien mort.</div>
+          </div>
+        </div>
+
+        <div class="prose">
+          <h2>5.2 — Les erreurs classiques. Celles qui te coûtent des mois.</h2>
+        </div>
+        <div class="error-cards">
+          <div class="error-card">
+            <div class="error-num">01</div>
+            <div>
+              <div class="error-title">Publier sans hook</div>
+              <div class="error-desc">Les 3 premières secondes vides. Un "bonjour je suis…" Résultat : abandon immédiat. Taux de complétion en chute. <em>Tonga dia atomboy ny galety !</em></div>
+            </div>
+          </div>
+          <div class="error-card">
+            <div class="error-num">02</div>
+            <div>
+              <div class="error-title">Copier le style d'un autre créateur</div>
+              <div class="error-desc">S'inspirer oui. Copier non. TikTok récompense l'authenticité algorithmiquement. Une audience sent quand quelqu'un joue un personnage qui n'est pas le sien.</div>
+            </div>
+          </div>
+          <div class="error-card">
+            <div class="error-num">03</div>
+            <div>
+              <div class="error-title">Attendre les résultats avant de republier</div>
+              <div class="error-desc">Une vidéo n'est pas un investissement — c'est une donnée. Tu as besoin d'un minimum de 20 à 30 vidéos pour comprendre ce qui fonctionne.</div>
+            </div>
+          </div>
+          <div class="error-card">
+            <div class="error-num">04</div>
+            <div>
+              <div class="error-title">S'obséder sur les followers</div>
+              <div class="error-desc">300 followers + vidéos à 15K vues > 5000 followers + vidéos à 200 vues. Le bon indicateur c'est le taux de complétion.</div>
+            </div>
+          </div>
+          <div class="error-card">
+            <div class="error-num">05</div>
+            <div>
+              <div class="error-title">Abandonner après 2 semaines</div>
+              <div class="error-desc">La différence entre ceux qui ont percé et les autres — c'est juste qu'ils ont continué. Une video de qualité par semaine vaut mieux que 3 vidéos par jour qui valent rien.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="prose">
+          <h2>5.3 — La fréquence.</h2>
+          <p>3 à 5 vidéos par semaine pour un débutant. L'heure ? Ça n'a jamais été important. Hashtag ? Pas important sur TikTok.</p>
+          <p>Ce qui tue plus de comptes que le manque de vidéos — c'est <strong>l'irrégularité</strong>. Un rythme modéré mais constant bat toujours un sprint suivi d'un silence.</p>
+          <h2>5.4 — Les 30 premiers jours. Le plan concret.</h2>
+        </div>
+
+        <div class="calendar-weeks">
+          <div class="week-row week-1">
+            <div class="week-header">📋 Semaine 1 — Setup & Observation</div>
+            <div class="week-body">
+              <div class="week-items">
+                <div class="week-item">Crée et optimise ton profil complet — photo, nom, bio, lien</div>
+                <div class="week-item">30 min/jour à consommer TikTok activement dans ton domaine — observer, pas se divertir</div>
+                <div class="week-item">Note 20 idées de vidéos</div>
+                <div class="week-item">Tourne tes 3 premières vidéos — ne les publie pas encore</div>
+                <div class="week-item">Définis ta niche, 2-3 subtopics, tes formats, ta fréquence et ton jour tournage</div>
+              </div>
+            </div>
+          </div>
+          <div class="week-row week-2">
+            <div class="week-header">🚀 Semaine 2 — Lancement</div>
+            <div class="week-body">
+              <div class="week-items">
+                <div class="week-item">Publie ta première vidéo. Lundi matin de préférence</div>
+                <div class="week-item">Publie 3 à 4 vidéos cette semaine — sujets différents, tu testes</div>
+                <div class="week-item">Regarde tes stats une fois par jour à heure fixe</div>
+                <div class="week-item">20 min/jour de consommation active</div>
+                <div class="week-item">Interagis avec d'autres créateurs — de vrais commentaires, pas des emojis</div>
+              </div>
+            </div>
+          </div>
+          <div class="week-row week-3">
+            <div class="week-header">🔍 Semaine 3 — Analyse</div>
+            <div class="week-body">
+              <div class="week-items">
+                <div class="week-item">6 à 8 vidéos publiées — laquelle a le meilleur taux de complétion ?</div>
+                <div class="week-item">Identifie un pattern — vidéos courtes, type de hook, sujet ?</div>
+                <div class="week-item">Publie 3 à 4 vidéos en appliquant ce que tu as observé</div>
+              </div>
+            </div>
+          </div>
+          <div class="week-row week-4">
+            <div class="week-header">🎯 Semaine 4 — Consolidation</div>
+            <div class="week-body">
+              <div class="week-items">
+                <div class="week-item">12 à 16 vidéos publiées — tu as des données réelles</div>
+                <div class="week-item">Double ce qui marche</div>
+                <div class="week-item">Identifie ta prochaine zone de progression — audio, lumière, hook ?</div>
+                <div class="week-item">Fixe ton rythme définitif pour les mois suivants</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="exercise">
+          <div class="exercise-header">
+            <div class="exercise-icon">⚡</div>
+            <div><div class="exercise-title">Fais ça maintenant</div><div class="exercise-subtitle">Exercice final</div></div>
+          </div>
+          <div class="exercise-body">
+            Ouvre les notes de ton téléphone. Écris :<br><br>
+            <strong>1.</strong> Ton nom de compte TikTok<br>
+            <strong>2.</strong> Ta bio en une phrase<br>
+            <strong>3.</strong> 3 sujets de ta première semaine de vidéos<br>
+            <strong>4.</strong> Ton rythme de publication — combien de vidéos par semaine<br>
+            <strong>5.</strong> Ta date de première publication<br><br>
+            Tu viens de créer ton plan de lancement. Il ne manque plus qu'une chose — <strong>appuyer sur publier.</strong>
+          </div>
+        </div>
+
+        <div class="takeaways">
+          <div class="takeaways-title">Ce que tu dois retenir</div>
+          <div class="takeaway-item"><div class="takeaway-dot"></div><div class="takeaway-text">Ton profil est ta vitrine — optimise-le avant ta première vidéo</div></div>
+          <div class="takeaway-item"><div class="takeaway-dot"></div><div class="takeaway-text">Les 5 erreurs classiques : pas de hook, copier, attendre, s'obséder sur les followers, abandonner</div></div>
+          <div class="takeaway-item"><div class="takeaway-dot"></div><div class="takeaway-text">3 à 5 vidéos par semaine — constant bat intense</div></div>
+          <div class="takeaway-item"><div class="takeaway-dot"></div><div class="takeaway-text">Les 30 premiers jours : setup → lancement → analyse → consolidation</div></div>
+          <div class="takeaway-item"><div class="takeaway-dot"></div><div class="takeaway-text">Tu n'as pas besoin d'être parfait au bout de 30 jours — tu as besoin d'avoir des données</div></div>
+        </div>
+
+        <!-- MOTIVATION FINALE -->
+        <div class="motivation-block">
+          <div class="motivation-quote">
+            Tu n'attends pas d'être <em>prêt</em>.<br>Tu te prépares <em>en publiant</em>.
+          </div>
+          <p class="motivation-sub">
+            Tout ce que tu viens d'apprendre — la psychologie, le blueprint, le gear, l'algorithme — ça ne vaut rien tant que la première vidéo n'est pas publiée. La connaissance sans action est juste du confort intellectuel.
+            <br><br>
+            Les créateurs qui réussissent ne sont pas ceux qui ont tout compris avant de commencer. Ce sont ceux qui ont commencé avant d'avoir tout compris.
+            <br><br>
+            Ta prochaine vidéo ne sera pas parfaite. Publie-la quand même. C'est elle qui t'apprendra ce qu'aucune formation ne peut t'enseigner.
+          </p>
+          <div class="motivation-sig">— ci.minou.tic</div>
+        </div>
+
+        <div class="mark-done-wrap"><button class="btn-done" onclick="markDone('s5')"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3,8 6,11 13,4"/></svg>Terminer la formation</button></div>
+
+        <!-- FOOTER -->
+        <div style="margin-top:60px;padding-top:32px;border-top:1px solid var(--border);text-align:center;">
+          <svg style="width:32px;height:32px;margin:0 auto 12px;" viewBox="0 0 44 44" fill="none">
+            <circle cx="22" cy="22" r="16" stroke="url(#fg1)" stroke-width="2" fill="none"/>
+            <path d="M15 22 L22 15 L29 22 L22 29 Z" stroke="url(#fg1)" stroke-width="1.5" fill="none"/>
+            <circle cx="32" cy="12" r="1.5" fill="url(#fg2)"/>
+            <defs>
+              <linearGradient id="fg1" x1="0" y1="0" x2="44" y2="44"><stop stop-color="#FFB6C1"/><stop offset="1" stop-color="#B6B6FF"/></linearGradient>
+              <linearGradient id="fg2" x1="0" y1="0" x2="44" y2="44"><stop stop-color="#C9952A"/><stop offset="1" stop-color="#B6B6FF"/></linearGradient>
+            </defs>
+          </svg>
+          <p style="font-family:'Playfair Display',serif;font-size:0.9rem;font-weight:700;color:var(--dark);margin-bottom:4px;">ci.minou.tic</p>
+          <p style="font-size:0.75rem;color:var(--grey-light);font-family:'DM Mono',monospace;letter-spacing:0.08em;">Formation Création de Contenu TikTok</p>
+          <p style="font-size:0.7rem;color:var(--grey-light);margin-top:8px;">© 2025 ci.minou.tic — Tous droits réservés. Accès personnel et non transférable.</p>
+        </div>
+      </div>
+
+    </main>
+  </div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast">
+  <div class="toast-title" id="toastTitle"></div>
+  <div class="toast-body" id="toastBody"></div>
+</div>
+
+<script>
+// ============================================================
+// CONFIG
+// ============================================================
+const API = "https://script.google.com/macros/s/AKfycbw-MGIGhrpwd5wkNAvp3zgNJddXZC1GNQiAyD3Wi-aSpDf0gl_j-ymtl6OlkPY4FwQV/exec";
+const SECTIONS = ['s1','s2','s31','s32','s33','s34','s35','s36','s37','s4','s5'];
+let currentSection = 's1';
+let sidebarOpen = true;
+let completedSections = new Set();
+
+// ============================================================
+// FINGERPRINT
+// ============================================================
+async function getFingerprint() {
+  const raw = [navigator.userAgent, navigator.language, screen.width+'x'+screen.height, screen.colorDepth, new Date().getTimezoneOffset(), navigator.hardwareConcurrency||'', navigator.platform||''].join('|');
+  const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(raw));
+  return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('').substring(0,32);
+}
+
+// ============================================================
+// GATE
+// ============================================================
+function getURLKey() {
+  return new URLSearchParams(window.location.search).get('key') || new URLSearchParams(window.location.search).get('KEY') || null;
+}
+
+function showMsg(type, text) {
+  const box = document.getElementById('msgBox');
+  const inp = document.getElementById('keyInput');
+  box.className = 'msg-box show msg-' + type;
+  document.getElementById('msgText').textContent = text;
+  document.getElementById('msgIcon').textContent = type === 'error' ? '✗' : '⚠';
+  inp.classList.remove('err','ok');
+  if(type === 'error') inp.classList.add('err');
+}
+
+function clearMsg() {
+  document.getElementById('msgBox').className = 'msg-box';
+  document.getElementById('keyInput').classList.remove('err','ok');
+}
+
+function setLoading(on) {
+  const btn = document.getElementById('btnGate');
+  btn.classList.toggle('loading', on);
+  btn.disabled = on;
+}
+
+function grantAccess(key) {
+  localStorage.setItem('fh_key', key);
+  localStorage.setItem('fh_ts', Date.now());
+
+  // Load saved progress
+  const saved = localStorage.getItem('fh_progress_' + key);
+  if(saved) {
+    completedSections = new Set(JSON.parse(saved));
+    completedSections.forEach(s => {
+      document.getElementById('nav-' + s)?.classList.add('done');
+    });
+    updateProgress();
+  }
+
+  document.getElementById('gate').classList.remove('active');
+  document.getElementById('app').classList.add('active');
+
+  const short = key.length > 12 ? key.substring(0,12)+'…' : key;
+  document.getElementById('accessKey').textContent = short;
+
+  showToast('✓ Accès autorisé', 'Bienvenue dans la formation — ' + key);
+}
+
+async function checkAccess() {
+  clearMsg();
+  const inp = document.getElementById('keyInput');
+  const key = inp.value.trim().toUpperCase();
+  if(!key || key.length < 3) { showMsg('error', "Veuillez entrer votre clé d'accès."); inp.focus(); return; }
+  setLoading(true);
+  try {
+    const hash = await getFingerprint();
+    const res  = await fetch(API + '?action=verify&key=' + encodeURIComponent(key) + '&hash=' + hash);
+    if(!res.ok) throw new Error('HTTP ' + res.status);
+    const data = await res.json();
+    setLoading(false);
+    if(data.status === 'ok')           { inp.classList.add('ok'); grantAccess(key); }
+    else if(data.status === 'invalid') { showMsg('error', "Clé introuvable. Vérifiez qu'elle est correctement copiée."); }
+    else if(data.status === 'disabled') { showMsg('error', 'Cette clé a été désactivée.'); }
+    else if(data.status === 'wrong_device') { showMsg('error', 'Cette clé est liée à un autre appareil.'); }
+    else { showMsg('error', 'Erreur inattendue. Réessayez.'); }
+  } catch(err) {
+    setLoading(false);
+    showMsg('warn', 'Vérifiez votre connexion internet et réessayez.');
+  }
+}
+
+async function checkLocalSession() {
+  const key = localStorage.getItem('fh_key');
+  const ts  = localStorage.getItem('fh_ts');
+  if(!key || !ts) return false;
+  if(Date.now() - parseInt(ts) > 7*24*60*60*1000) { localStorage.removeItem('fh_key'); localStorage.removeItem('fh_ts'); return false; }
+  setLoading(true);
+  try {
+    const hash = await getFingerprint();
+    const res  = await fetch(API + '?action=verify&key=' + encodeURIComponent(key) + '&hash=' + hash);
+    const data = await res.json();
+    setLoading(false);
+    if(data.status === 'ok') { grantAccess(key); return true; }
+    else { localStorage.removeItem('fh_key'); localStorage.removeItem('fh_ts'); return false; }
+  } catch {
+    setLoading(false);
+    if(Date.now() - parseInt(ts) < 24*60*60*1000) { grantAccess(key); return true; }
+    return false;
+  }
+}
+
+// ============================================================
+// NAVIGATION
+// ============================================================
+function showSection(id) {
+  // Hide all panels
+  document.querySelectorAll('.section-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-item, .nav-sub-item').forEach(n => n.classList.remove('active'));
+
+  // Show selected
+  document.getElementById(id)?.classList.add('active');
+  document.getElementById('nav-' + id)?.classList.add('active');
+
+  currentSection = id;
+
+  // Scroll to top
+  window.scrollTo(0, 0);
+  document.querySelector('.main')?.scrollTo(0, 0);
+
+  // Close sidebar on mobile
+  if(window.innerWidth < 769) closeSidebar();
+}
+
+function markDone(id) {
+  completedSections.add(id);
+  document.getElementById('nav-' + id)?.classList.add('done');
+  document.getElementById('nav-' + id)?.classList.remove('active');
+
+  // Save progress
+  const key = localStorage.getItem('fh_key');
+  if(key) localStorage.setItem('fh_progress_' + key, JSON.stringify([...completedSections]));
+
+  // Update button
+  const btn = document.querySelector('#' + id + ' .btn-done');
+  if(btn) { btn.classList.add('done-state'); btn.innerHTML = '<svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3,8 6,11 13,4"/></svg> Terminé ✓'; }
+
+  updateProgress();
+  showToast('✓ Section terminée !', 'Continue comme ça — tu avances bien.');
+
+  // Go to next section
+  const idx = SECTIONS.indexOf(id);
+  if(idx < SECTIONS.length - 1) {
+    setTimeout(() => showSection(SECTIONS[idx + 1]), 600);
+  }
+}
+
+function updateProgress() {
+  const pct = Math.round((completedSections.size / SECTIONS.length) * 100);
+  document.getElementById('progressFill').style.width = pct + '%';
+  document.getElementById('progressText').textContent = pct + '%';
+}
+
+// ============================================================
+// SIDEBAR
+// ============================================================
+function toggleSidebar() {
+  if(window.innerWidth < 769) {
+    const sb = document.getElementById('sidebar');
+    const ov = document.getElementById('sidebarOverlay');
+    const isOpen = sb.classList.contains('mobile-open');
+    if(isOpen) { sb.classList.remove('mobile-open'); ov.classList.remove('show'); }
+    else { sb.classList.add('mobile-open'); ov.classList.add('show'); }
+  } else {
+    const sb   = document.getElementById('sidebar');
+    const main = document.getElementById('mainContent');
+    sidebarOpen = !sidebarOpen;
+    sb.classList.toggle('hidden', !sidebarOpen);
+    main.classList.toggle('full', !sidebarOpen);
+  }
+}
+
+function closeSidebar() {
+  const sb = document.getElementById('sidebar');
+  const ov = document.getElementById('sidebarOverlay');
+  sb.classList.remove('mobile-open');
+  ov.classList.remove('show');
+}
+
+// ============================================================
+// TOAST
+// ============================================================
+function showToast(title, body) {
+  const t = document.getElementById('toast');
+  document.getElementById('toastTitle').textContent = title;
+  document.getElementById('toastBody').textContent = body;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 4000);
+}
+
+// ============================================================
+// INPUT
+// ============================================================
+document.getElementById('keyInput').addEventListener('keydown', e => { if(e.key === 'Enter') checkAccess(); });
+document.getElementById('keyInput').addEventListener('input', e => {
+  clearMsg();
+  e.target.value = e.target.value.toUpperCase().replace(/[^A-Z0-9-]/g,'');
+});
+
+// ============================================================
+// INIT
+// ============================================================
+window.addEventListener('DOMContentLoaded', async () => {
+  const urlKey = getURLKey();
+  if(urlKey) {
+    document.getElementById('urlBadge').classList.add('show');
+    document.getElementById('urlKeyVal').textContent = urlKey.toUpperCase();
+    document.getElementById('keyInput').value = urlKey.toUpperCase();
+  }
+  const hasSession = await checkLocalSession();
+  if(urlKey && !hasSession) setTimeout(() => checkAccess(), 600);
+});
+</script>
+</body>
+</html>
